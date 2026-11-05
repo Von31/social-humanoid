@@ -1,45 +1,3795 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Social Humanoid — Coming Soon</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-      background: #fff;
-      color: #111;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    main {
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      box-sizing: border-box;
-      text-align: center;
-    }
-    img {
-      width: min(420px, 80vw);
-      height: auto;
-    }
-    h1 {
-      margin: 0;
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Humanoid &mdash; Socially Responsive Human&ndash;Humanoid Interaction</title>
+    <link rel="icon" type="image/jpeg" href="assets/social_humanoid_logo.jpeg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ink: #111827;          /* headings */
+            --text: #374151;         /* body copy */
+            --muted: #6b7280;        /* secondary copy, captions */
+            --faint: #9ca3af;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --bg: #fafafa;
+            --accent: #FDB515;       /* Berkeley gold */
+            --accent-strong: #C4820E;
+            --radius: 16px;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --content-width: 1100px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 1.0625rem; /* 17px base */
+            background: var(--bg);
+            color: #1f2937;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; }
+
+        :focus-visible {
+            outline: 2px solid var(--accent-strong);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: #fafafa;
+            padding: 2.5rem 0;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 100;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 2px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .logo {
+            padding: 1rem 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+
+        .logo-image {
+            width: 100%;
+            max-width: 220px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0;
+        }
+
+        .logo-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            object-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo h1 {
+            font-size: 1.375rem;
+            color: #111827;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .logo p {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* Hero links: Paper / Code / Data */
+        .hero-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.75rem;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.6rem 1.15rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--ink);
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.2;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .hero-btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .hero-btn.primary {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: #ffffff;
+        }
+
+        a.hero-btn:hover {
+            background: #1f2937;
+            border-color: #1f2937;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .hero-btn[aria-disabled="true"] {
+            color: var(--faint);
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .hero-btn .soon {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--muted);
+            background: #f3f4f6;
+            border-radius: 999px;
+            padding: 0.15rem 0.5rem;
+        }
+
+        .nav-section {
+            padding: 0 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-section h2 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--faint);
+            margin: 0 0 0.75rem 1rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            padding: 0.55rem 1rem;
+            margin: 0.125rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.975rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--surface);
+            color: var(--ink);
+        }
+
+        .nav-item.active {
+            background: var(--surface);
+            color: var(--ink);
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 3px;
+            border-radius: 3px;
+            background: var(--accent);
+        }
+
+        .nav-item img {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 3rem;
+            width: calc(100% - 260px);
+            max-width: none;
+        }
+
+        /* Keep line lengths readable on wide screens */
+        .main-content > * {
+            max-width: var(--content-width);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .hero-section h2 {
+            font-size: 3.5rem; /* 56px */
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            line-height: 1.1;
+            color: #1f2937;
+        }
+
+        .hero-description {
+            font-size: 1.375rem; /* 22px */
+            color: #4b5563;
+            max-width: 100%;
+            margin: 0 auto;
+            line-height: 1.35;
+        }
+
+        .hero-authors {
+            font-size: 1.0625rem; /* 17px */
+            line-height: 1.6;
+            color: #1f2937;
+            max-width: 820px;
+            margin: 1.25rem auto 0;
+        }
+
+        .hero-authors a { color: #111827; text-decoration: none; }
+        .hero-authors a:hover { text-decoration: underline; }
+        .hero-authors sup { font-size: 0.7em; color: #6b7280; }
+
+        .hero-affiliations {
+            font-size: 0.9375rem; /* 15px */
+            color: #6b7280;
+            margin: 0.5rem auto 0;
+        }
+
+        .hero-affiliations sup { font-size: 0.7em; }
+
+        .hero-venue {
+            display: flex;
+            justify-content: center;
+            margin: 1rem auto 0;
+        }
+
+        .venue-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid #d1d5db;
+            background: #ffffff;
+            color: #374151;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            text-decoration: none;
+        }
+
+        .venue-tag:hover {
+            border-color: #9ca3af;
+            color: #111827;
+        }
+
+        .venue-tag .venue-year {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header h3 {
+            font-size: 2.25rem; /* 36px */
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            color: var(--ink);
+        }
+
+        .section-header h3::after {
+            content: '';
+            display: block;
+            width: 44px;
+            height: 3px;
+            margin-top: 0.6rem;
+            border-radius: 3px;
+            background: var(--accent);
+        }
+
+        .section-header p {
+            color: var(--muted);
+            font-size: 1.125rem; /* 18px */
+            max-width: 72ch;
+        }
+
+        /* Short closing note under a figure or carousel */
+        .section-note {
+            margin: 1.5rem auto 0;
+            max-width: 68ch;
+            color: var(--muted);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* Abstract */
+        .abstract-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #FDB515;
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .abstract-card p {
+            margin: 0;
+            color: #374151;
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            text-align: justify;
+            hyphens: auto;
+        }
+        .abstract-card p + p { margin-top: 1.1rem; }
+        .abstract-card b { color: #111827; font-weight: 600; }
+        @media (max-width: 768px) {
+            .abstract-card { padding: 1.25rem 1.25rem; }
+            .abstract-card p { font-size: 0.975rem; line-height: 1.7; text-align: left; }
+        }
+
+        /* Teaser Video Section */
+        .teaser-video {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .teaser-caption {
+            margin: 0;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            color: #4b5563;
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            background: #f9fafb;
+            border-top: 1px solid var(--border);
+        }
+
+        .teaser-caption b { color: var(--ink); }
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-player video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* ========================================
+           DFoT Visualization Styles (Light Theme)
+           ======================================== */
+        .dfot-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+
+        .dfot-wrapper {
+            max-width: 100%;
+        }
+
+        .dfot-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .dfot-tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            background: #ffffff;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+
+        .dfot-tab.active {
+            background: #1f2937;
+            color: white;
+            border-color: #1f2937;
+        }
+
+        .dfot-tab:hover:not(.active) {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .dfot-description {
+            background: #334155;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dfot-description-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dfot-description-text {
+            font-size: 0.9375rem;
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .dfot-description-formula {
+            display: inline-block;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            padding: 0.375rem 0.75rem;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            color: #f1f5f9;
+            margin: 0.5rem 0;
+            font-size: 0.9375rem;
+        }
+
+        .dfot-description-highlight {
+            color: #fdd57e;
+            font-weight: 500;
+        }
+
+        .dfot-controls-bar {
+            width: 100%;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #475569;
+        }
+
+        .dfot-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .dfot-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dfot-btn-play {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .dfot-btn-play:hover {
+            background: #059669;
+        }
+
+        .dfot-btn-play.paused {
+            background: #475569;
+            color: #e2e8f0;
+            border-color: #64748b;
+        }
+
+        .dfot-btn-reset {
+            background: #475569;
+            color: #e2e8f0;
+        }
+
+        .dfot-btn-reset:hover {
+            background: #64748b;
+        }
+
+        .dfot-speed {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dfot-speed label {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .dfot-speed input {
+            width: 80px;
+            accent-color: #FDB515;
+        }
+
+        .dfot-speed span {
+            color: #cbd5e1;
+            font-size: 13px;
+            width: 28px;
+        }
+
+        .dfot-frame {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-left: auto;
+        }
+
+        .dfot-timeline {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .dfot-timeline label {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .dfot-timeline input {
+            flex: 1;
+            height: 6px;
+            cursor: pointer;
+            accent-color: #FDB515;
+            border-radius: 3px;
+        }
+
+        .dfot-viz {
+            --dfot-block: 56px;
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .dfot-viz .dfot-description {
+            flex: 0 0 280px;
+            margin-bottom: 0;
+            position: sticky;
+            top: 18px;
+        }
+
+        .dfot-viz-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .dfot-main {
+            display: flex;
+            justify-content: center;
+        }
+
+        .dfot-yaxis-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            width: 80px;
+        }
+
+        .dfot-yaxis-label span {
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .dfot-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dfot-xaxis-title {
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .dfot-xaxis-labels {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 6px;
+            margin-left: 36px;
+        }
+
+        .dfot-xaxis-group {
+            display: flex;
+            margin-right: 4px;
+        }
+
+        .dfot-xaxis-label {
+            color: #94a3b8;
+            font-size: 11px;
+            text-align: center;
+            width: var(--dfot-block);
+        }
+
+        .dfot-xaxis-label:last-child {
+            margin-left: 4px;
+        }
+
+        .dfot-grid {
+            display: flex;
+            justify-content: center;
+        }
+
+        .dfot-yaxis-numbers {
+            display: flex;
+            flex-direction: column;
+            margin-right: 6px;
+        }
+
+        .dfot-yaxis-number {
+            height: calc(var(--dfot-block) + 4px);
+            width: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .dfot-yaxis-number.active {
+            color: #facc15;
+            font-weight: bold;
+        }
+
+        .dfot-yaxis-number .arrow {
+            color: #facc15;
+            margin-right: 4px;
+            animation: dfot-pulse 1s infinite;
+        }
+
+        @keyframes dfot-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .dfot-rows {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dfot-row {
+            display: flex;
+            margin-bottom: 4px;
+            padding: 2px;
+            margin-left: -2px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .dfot-row.active {
+            background: rgba(250, 204, 21, 0.15);
+            border-color: rgba(250, 204, 21, 0.8);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.4), inset 0 0 15px rgba(250, 204, 21, 0.1);
+        }
+
+        .dfot-time-group {
+            display: flex;
+            margin-right: 4px;
+        }
+
+        /* Agentic sampling column wrappers - Red and Blue */
+        .dfot-agent-col-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .dfot-agent-col-wrapper.agent-a-wrapper {
+            border: 2px solid hsl(0, 70%, 50%);
+            border-radius: 6px;
+            padding: 3px;
+            background: hsla(0, 70%, 50%, 0.1);
+        }
+
+        .dfot-agent-col-wrapper.agent-b-wrapper {
+            border: 2px solid hsl(210, 70%, 50%);
+            border-radius: 6px;
+            padding: 3px;
+            margin-left: 3px;
+            background: hsla(210, 70%, 50%, 0.1);
+        }
+
+        .dfot-block.active-row {
+            outline: 3px solid rgba(250, 204, 21, 0.9);
+            outline-offset: -1px;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.6);
+        }
+
+        .dfot-block {
+            width: var(--dfot-block);
+            height: var(--dfot-block);
+            border-radius: 5px;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dfot-time-group > .dfot-block:last-child {
+            margin-left: 4px;
+        }
+
+        .dfot-block canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .dfot-legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #334155;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .dfot-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dfot-legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        .dfot-legend-text {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+                padding: 2rem;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                border-radius: 0;
+                top: 0;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 1rem 0;
+            }
+
+            .logo {
+                padding: 0.75rem 1rem 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .logo-image {
+                max-width: 160px;
+            }
+
+            .nav-section {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                padding: 0 1rem;
+                justify-content: center;
+            }
+
+            .nav-section h2 {
+                display: none;
+            }
+
+            .nav-item {
+                padding: 0.45rem 0.9rem;
+                margin: 0;
+                font-size: 0.85rem;
+                background: #f3f4f6;
+                border-radius: 999px;
+            }
+
+            .nav-item.active::before {
+                display: none;
+            }
+
+            .nav-item.active {
+                background: #1f2937;
+                color: #ffffff;
+                box-shadow: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem 1rem;
+            }
+
+            .hero-section {
+                margin-bottom: 2rem;
+            }
+
+            .hero-section h2 {
+                font-size: 1.75rem;
+                line-height: 1.3;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+
+            .hero-links {
+                gap: 0.5rem;
+                margin-top: 1.25rem;
+            }
+
+            .hero-btn {
+                padding: 0.5rem 0.9rem;
+                font-size: 0.875rem;
+            }
+
+            .section {
+                margin-bottom: 3rem;
+            }
+
+            .section-header h3 {
+                font-size: 1.5rem;
+            }
+
+            .section-header p {
+                font-size: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+            }
+
+            .teaser-video {
+                max-width: 100%;
+                border-radius: 12px;
+            }
+
+            .video-player {
+                border-radius: 12px 12px 0 0;
+            }
+
+            /* DFoT Visualization Mobile */
+            .dfot-container {
+                padding: 1rem;
+            }
+
+            .dfot-viz {
+                --dfot-block: 40px;
+                padding: 12px;
+                overflow-x: auto;
+                flex-direction: column;
+            }
+
+            .dfot-viz .dfot-description {
+                flex: none;
+                width: 100%;
+                position: static;
+            }
+
+            .dfot-main {
+                min-width: 500px;
+            }
+
+            .dfot-tabs {
+                gap: 4px;
+                flex-wrap: wrap;
+            }
+
+            .dfot-tab {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .dfot-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .dfot-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+
+            .dfot-speed {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dfot-frame {
+                width: 100%;
+                text-align: center;
+                margin-left: 0;
+            }
+
+            .dfot-description {
+                padding: 1rem;
+            }
+
+            .dfot-description-title {
+                font-size: 1rem;
+            }
+
+            .dfot-description-text {
+                font-size: 0.875rem;
+            }
+
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            a.hero-btn:hover,
+            .result-card:hover {
+                transform: none;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .hero-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .hero-description {
+                font-size: 0.9rem;
+            }
+
+            .main-content {
+                padding: 1rem 0.75rem;
+            }
+
+            .section-header h3 {
+                font-size: 1.25rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .nav-item {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .nav-item span {
+                display: none;
+            }
+
+            .dfot-tab {
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+
+            .teaser-caption {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .video-player video {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-title {
+            margin: 3.5rem 0 1rem;
+            font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+            font-weight: 650;
+            letter-spacing: -0.015em;
+            line-height: 1.3;
+            color: var(--ink);
+        }
+
+        .card-title + .results-note {
+            margin-top: 0;
+        }
+
+        /* A subsection title right after a section heading doesn't need the big gap */
+        .section-header .card-title,
+        .section-header + .card-title {
+            margin-top: 0;
+        }
+
+        /* ========================================
+           Init Noise Patterns Styles
+           ======================================== */
+        .noise-patterns-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+            margin-top: 3rem;
+        }
+
+        .noise-patterns-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .noise-patterns-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .noise-patterns-subtitle {
+            font-size: 1.0625rem;
+            color: #6b7280;
+            line-height: 1.7;
+            max-width: 640px;
+        }
+
+        .noise-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+            border-bottom: 1.5px solid #e5e7eb;
+            padding-bottom: 0;
+        }
+
+        .noise-tab {
+            padding: 8px 16px;
+            border-radius: 6px 6px 0 0;
+            border: 1.5px solid transparent;
+            border-bottom: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.12s;
+            white-space: nowrap;
+            position: relative;
+            bottom: -1.5px;
+        }
+
+        .noise-tab:hover {
+            color: #1f2937;
+            background: #f9fafb;
+        }
+
+        .noise-tab.active {
+            background: #ffffff;
+            color: #1f2937;
+            border-color: #e5e7eb;
+            border-bottom-color: #ffffff;
+            font-weight: 600;
+        }
+
+        .noise-panel {
+            display: none;
+            padding-top: 1.5rem;
+        }
+
+        .noise-panel.active {
+            display: block;
+        }
+
+        .noise-all-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .noise-all-row:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .noise-row-label {
+            text-align: right;
+        }
+
+        .noise-row-label .noise-row-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+            font-family: ui-monospace, monospace;
+        }
+
+        .noise-single-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .noise-single-desc .noise-single-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            font-family: ui-monospace, monospace;
+            margin-bottom: 10px;
+        }
+
+        .noise-single-desc .noise-single-text {
+            font-size: 1.0625rem;
+            color: #6b7280;
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .noise-single-desc .noise-single-math {
+            font-size: 12px;
+            font-style: italic;
+            color: #4b5563;
+            background: #ffffff;
+            border-left: 3px solid #e5e7eb;
+            padding: 8px 12px;
+            border-radius: 0 5px 5px 0;
+            white-space: pre-line;
+            font-family: ui-monospace, monospace;
+        }
+
+        canvas.noise-strip-sm {
+            display: block;
+            width: 100%;
+            height: 38px;
+            border-radius: 4px;
+            image-rendering: pixelated;
+        }
+
+        canvas.noise-strip-lg {
+            display: block;
+            width: 100%;
+            height: 64px;
+            border-radius: 6px;
+            image-rendering: pixelated;
+        }
+
+        .noise-axis {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #9ca3af;
+            padding-top: 5px;
+            border-top: 1px solid #e5e7eb;
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .noise-axis-mid {
+            position: absolute;
+            top: 5px;
+            transform: translateX(-50%);
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .noise-legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        .noise-leg {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .noise-leg-sw {
+            width: 20px;
+            height: 14px;
+            border-radius: 3px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .noise-all-row {
+                grid-template-columns: 120px 1fr;
+                gap: 8px;
+            }
+
+            .noise-tab {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .noise-all-row {
+                grid-template-columns: 1fr;
+            }
+
+            .noise-row-label {
+                text-align: left;
+            }
+        }
+    </style>
+    <style>
+        /* ---------- Three Gaps (animated contributions) ---------- */
+        #contributions .gaps-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; }
+        #contributions .gaps-head .section-header { margin-bottom: 2rem; }
+        #contributions .gap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+        #contributions .gap-card {
+            background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); padding: 1.25rem;
+            display: flex; flex-direction: column;
+        }
+        #contributions .gap-card header { display: flex; align-items: center; gap: 0.6rem; }
+        #contributions .gap-card .num {
+            width: 30px; height: 30px; border-radius: 8px; background: #f1f5f9; color: #111827;
+            font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        #contributions .gap-card h4 { font-size: 1.25rem; font-weight: 600; color: #1f2937; }
+        #contributions .gap-card .claim { color: #6b7280; font-size: 0.95rem; line-height: 1.55; margin: 0.6rem 0 1rem; min-height: 4.65em; }
+        #contributions .stage {
+            position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden;
+            background: #f3f5f8; cursor: pointer;
+        }
+        #contributions .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        #contributions .stage .loading {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            color: #9ca3af; font-size: 0.95rem; pointer-events: none; transition: opacity 0.6s ease;
+        }
+        #contributions .beat { margin-top: 1rem; min-height: 5.2em; transition: opacity 0.3s ease; }
+        #contributions .beat b { display: block; font-size: 1.02rem; font-weight: 600; line-height: 1.4; color: #1f2937; }
+        #contributions .beat .sub { display: block; font-size: 0.9rem; line-height: 1.5; color: #6b7280; margin-top: 0.2rem; }
+        #contributions .beat.r b { color: #dc2626; }
+        #contributions .beat.t b { color: #111827; }
+        #contributions .beat.v b { color: #4b5563; font-weight: 500; }
+        #contributions .in { animation: gaps-rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+        @keyframes gaps-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        /* Per-card transport: play/pause, beat stepping, scrubbable timeline */
+        #contributions .gap-controls { margin-top: auto; padding-top: 0.85rem; display: flex; align-items: center; gap: 0.4rem; }
+        #contributions .gc-btn {
+            flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; padding: 0;
+            background: #f3f4f6; border: 1px solid #e5e7eb; color: #4b5563; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        #contributions .gc-btn:hover { background: #1f2937; border-color: #1f2937; color: #ffffff; }
+        #contributions .gc-btn svg { width: 11px; height: 11px; }
+        #contributions .gc-scrub { position: relative; flex: 1 1 auto; height: 30px; display: flex; align-items: center; margin: 0 0.25rem; }
+        #contributions .gc-scrub input {
+            -webkit-appearance: none; appearance: none; width: 100%; height: 4px; margin: 0; border-radius: 2px; cursor: pointer;
+            background: linear-gradient(to right, #1f2937 var(--p, 0%), #e5e7eb var(--p, 0%));
+        }
+        #contributions .gc-scrub input::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+            background: #ffffff; border: 2px solid #1f2937; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        #contributions .gc-scrub input::-moz-range-thumb {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #ffffff; border: 2px solid #1f2937; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        #contributions .gc-tick {
+            position: absolute; top: 50%; width: 2px; height: 10px; margin: -5px 0 0 -1px;
+            border-radius: 1px; background: #9ca3af; pointer-events: none;
+        }
+        #contributions .gc-count {
+            flex: 0 0 auto; min-width: 2.6em; text-align: right;
+            font-size: 0.78rem; font-weight: 600; color: #6b7280; font-variant-numeric: tabular-nums;
+        }
+        #contributions .gaps-play {
+            flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; margin-bottom: 2rem;
+            background: #f3f4f6; border: 1px solid #e5e7eb; color: #4b5563; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        #contributions .gaps-play:hover { background: #1f2937; border-color: #1f2937; color: #ffffff; }
+        #contributions .gaps-play svg { width: 12px; height: 12px; }
+        @media (max-width: 1100px) {
+            #contributions .gap-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+            #contributions .gap-card .claim, #contributions .beat { min-height: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) { #contributions .in { animation: none; } }
+        /* Retargeting results: "view all" gallery */
+        .retarget-more { display: flex; justify-content: center; margin-top: 1.25rem; }
+        .retarget-more-btn {
+            padding: 0.65rem 1.4rem; border-radius: 999px; border: 1px solid #C4820E;
+            background: #fff; color: #003262; font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; font-family: inherit; transition: all 0.2s ease;
+        }
+        .retarget-more-btn:hover { background: #FDB515; box-shadow: 0 2px 8px rgba(253, 181, 21, 0.45); }
+        .retarget-gallery {
+            width: min(1200px, calc(100vw - 2rem)); max-height: calc(100vh - 2rem);
+            padding: 0; border: 0; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 24px 64px rgba(15, 23, 42, 0.35);
+        }
+        .retarget-gallery[open] { display: flex; flex-direction: column; }
+        .retarget-gallery::backdrop { background: rgba(15, 23, 42, 0.6); }
+        .rg-head {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background: #f9fafb;
+        }
+        .rg-head h4 { margin: 0; font-size: 1.15rem; color: #1f2937; }
+        .rg-head h4 span { margin-left: 0.5rem; font-size: 0.85rem; font-weight: 500; color: #6b7280; }
+        .rg-close {
+            width: 2.25rem; height: 2.25rem; border-radius: 999px; border: 1px solid #e5e7eb;
+            background: #fff; color: #374151; font-size: 1.4rem; line-height: 1; cursor: pointer;
+        }
+        .rg-close:hover { background: #f3f4f6; }
+        .rg-filters {
+            display: flex; flex-wrap: wrap; gap: 0.5rem;
+            padding: 0.85rem 1.5rem; border-bottom: 1px solid #e5e7eb; background: #fff;
+        }
+        .rg-chip {
+            padding: 0.35rem 0.85rem; border-radius: 999px; border: 1px solid #e5e7eb;
+            background: #fff; color: #4b5563; font-size: 0.875rem; font-weight: 600;
+            cursor: pointer; font-family: inherit; transition: all 0.15s ease;
+        }
+        .rg-chip span { margin-left: 0.25rem; font-weight: 500; color: #9ca3af; }
+        .rg-chip:hover:not(.active) { border-color: #FDB515; background: #fff8e6; color: #003262; }
+        .rg-chip.active { background: #FDB515; border-color: #C4820E; color: #003262; }
+        .rg-chip.active span { color: #7c5a12; }
+        .rg-body { overflow-y: auto; padding: 1rem 1.5rem 1.5rem; background: #f3f4f6; }
+        .rg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.6rem; }
+        .rg-body { position: relative; }
+        .rg-item {
+            position: relative; margin: 0; aspect-ratio: 16 / 9; overflow: hidden; cursor: zoom-in;
+            border-radius: 10px; background: #fafafa; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.22s ease, box-shadow 0.22s ease; z-index: 1;
+        }
+        .rg-item[hidden] { display: none; }
+        .rg-item video { display: block; width: 100%; height: 100%; object-fit: cover; }
+        /* hover / keyboard focus: tile grows (origin set per tile so it stays inside the grid) and plays */
+        .rg-item.is-zoomed { transform: scale(1.4); z-index: 5; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28); }
+        @media (hover: none) { .rg-item.is-zoomed { transform: none; } }
+        .rg-item figcaption {
+            position: absolute; left: 0.5rem; bottom: 0.45rem; display: flex; align-items: center; gap: 0.35rem;
+            padding: 0.2rem 0.55rem; border-radius: 999px; background: rgba(255, 255, 255, 0.88);
+            font-size: 0.78rem; color: #111827; pointer-events: none;
+        }
+        .rg-item figcaption span { color: #6b7280; font-size: 0.72rem; }
+        .rg-item figcaption span::before { content: "\00b7"; margin-right: 0.35rem; color: #9ca3af; }
+        .rg-viewer {
+            position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
+            padding: 1.5rem; background: rgba(15, 23, 42, 0.72);
+        }
+        .rg-viewer[hidden] { display: none; }
+        .rg-viewer-box { position: relative; width: min(100%, 1100px); }
+        .rg-viewer-box video { display: block; width: 100%; max-height: calc(100vh - 9rem); border-radius: 12px; background: #fff; }
+        .rg-viewer-cap { margin: 0.6rem 0 0; text-align: center; color: #fff; font-size: 0.95rem; }
+        .rg-viewer-close { position: absolute; top: -0.9rem; right: -0.9rem; z-index: 1; }
+        @media (max-width: 700px) {
+            .rg-head, .rg-filters, .rg-body { padding-left: 1rem; padding-right: 1rem; }
+            .rg-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+        }
+    </style>
 </head>
 <body>
-  <main>
-    <img src="assets/images/social_humanoid_logo.jpeg" alt="Social Humanoid logo">
-    <h1>Coming Soon</h1>
-  </main>
+    <!-- Page-specific styling for Social Humanoid (placeholders, tables, cards, formula box) -->
+    <style>
+
+        .result-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06); transition: all 0.3s ease; }
+        .result-card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.12); transform: translateY(-4px); }
+        .result-card .rc-caption { padding: 1.1rem 1.5rem; border-top: 1px solid #e5e7eb; background:#ffffff; }
+        .result-card .rc-caption b { color:#1f2937; }
+        .result-card .rc-caption p { margin:0.25rem 0 0; color:#6b7280; font-size:0.9rem; }
+        /* HHI Benchmark: headline number + source datasets */
+        .hhi-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 2rem; margin-bottom: 3rem; }
+        .hhi-hero { display: flex; align-items: center; gap: 2rem; padding-bottom: 1.75rem; border-bottom: 1px solid #f3f4f6; }
+        .hhi-hero .big { font-size: 4rem; font-weight: 700; line-height: 1; color: #111827; letter-spacing: -0.03em; white-space: nowrap; }
+        .hhi-hero .big small { font-size: 1.5rem; font-weight: 600; color: #6b7280; margin-left: 0.35rem; letter-spacing: 0; }
+        .hhi-hero p { color: #4b5563; font-size: 1.0625rem; line-height: 1.6; margin: 0; }
+        .hhi-hero p b { color: #1f2937; }
+        .hhi-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9ca3af; margin: 1.5rem 0 0.9rem; }
+        .hhi-sources { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.9rem; }
+        .hhi-src { border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 0.35rem; }
+        .hhi-src strong { color: #1f2937; font-size: 0.95rem; }
+        .hhi-src span { color: #6b7280; font-size: 0.85rem; line-height: 1.5; }
+        @media (max-width: 1100px) { .hhi-sources { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (max-width: 768px) {
+            .hhi-card { padding: 1.25rem; }
+            .hhi-hero { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .hhi-hero .big { font-size: 3rem; }
+            .hhi-sources { grid-template-columns: 1fr 1fr; }
+        }
+
+        .bibtex-box {
+            position: relative; background: #0f172a; color: #e2e8f0;
+            border-radius: 12px; padding: 1.25rem 1.5rem; margin-top: 1rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.85rem; line-height: 1.65; overflow-x: auto;
+        }
+        .bibtex-box pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+        .bibtex-copy {
+            position: absolute; top: 0.75rem; right: 0.75rem;
+            border: 1px solid #334155; background: #1e293b; color: #e2e8f0;
+            border-radius: 8px; padding: 0.35rem 0.7rem; font-size: 0.75rem;
+            font-weight: 600; cursor: pointer; font-family: inherit;
+        }
+        .acknowledgements-card {
+            background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px;
+            padding: 1.75rem 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        @media (max-width: 768px) { .acknowledgements-card { padding: 1.25rem; } }
+        .acknowledgements-text { color: #4b5563; font-size: 1rem; line-height: 1.75; margin: 0; }
+        .bibtex-copy:hover { background: #334155; }
+        .bibtex-copy.copied { background: #166534; border-color: #166534; }
+
+        .results-note {
+            color: #6b7280; font-size: 0.95rem; line-height: 1.65; margin: 0.75rem 0 2rem;
+        }
+        /* Figures (images + inline video) */
+        .sh-figure {
+            margin: 0; background:#fff; border:1px solid #e5e7eb; border-radius:16px;
+            overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06);
+        }
+        .sh-figure > img, .sh-figure > video {
+            display:block; width:100%; height:auto; background:#ffffff;
+        }
+        .sh-figure figcaption {
+            padding:1rem 1.5rem; border-top:1px solid #e5e7eb; background:#ffffff;
+            color:#6b7280; font-size:0.95rem; line-height:1.65;
+        }
+        .sh-figure figcaption b { color:#1f2937; }
+        .retarget-legend {
+            display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:0.75rem 3rem;
+            padding:1rem 1.5rem; background:#fff;
+        }
+        .retarget-legend-item { display:inline-flex; align-items:center; gap:0.4rem; color:#111827; font-size:1.05rem; }
+        .retarget-legend-swatch { width:18px; height:18px; border-radius:4px; flex-shrink:0; }
+        .retarget-legend.legend-spaced { margin-bottom: 1rem; border-radius: var(--radius); }
+        .figure-pad > img { padding:1.25rem; box-sizing:border-box; }
+        /* Per-dataset retargeting showcase */
+        .dataset-tab-bar {
+            display: flex; flex-wrap: wrap; gap: 0.5rem;
+            padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; background: #ffffff;
+        }
+        .dataset-tab {
+            padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid #e5e7eb;
+            background: #fff; color: #6b7280; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .dataset-tab:hover:not(.active) {
+            color: #111827; border-color: #FDB515; background: #f1f5f9;
+        }
+        .dataset-tab.active {
+            color: #111827; background: #FDB515; border-color: #C4820E;
+            box-shadow: 0 2px 8px rgba(253, 181, 21, 0.45);
+        }
+        .dataset-panel { display: none; }
+        .dataset-panel.active { display: block; }
+        .dataset-showcase {
+            margin-top: 2.5rem;
+            overflow: visible;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+        .dataset-showcase .dataset-tab-bar {
+            border: 1px solid #e5e7eb;
+            border-radius: 16px 16px 0 0;
+            margin-bottom: 0;
+        }
+        .dataset-showcase-caption {
+            margin-top: 1rem;
+            padding: 1rem 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+        .dataset-showcase-caption b { color: #1f2937; }
+        .dataset-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            z-index: 2; width: 2.5rem; height: 2.5rem; border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.35); background: rgba(15,23,42,0.72);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: background 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 4px 14px rgba(15,23,42,0.25);
+        }
+        .dataset-nav:hover:not(:disabled) { background: rgba(15,23,42,0.9); }
+        .dataset-nav:disabled { opacity: 0.35; cursor: default; }
+        .dataset-nav.prev { left: 0.75rem; }
+        .dataset-nav.next { right: 0.75rem; }
+        .dataset-nav svg { width: 1.25rem; height: 1.25rem; }
+        .dataset-carousel-count {
+            position: absolute; bottom: 0.75rem; left: 50%; transform: translateX(-50%);
+            z-index: 2; padding: 0.2rem 0.65rem; border-radius: 999px;
+            background: rgba(15,23,42,0.65); color: #fff; font-size: 0.75rem; font-weight: 600;
+            pointer-events: none;
+        }
+        .examples-carousel {
+            position: relative;
+            background: transparent;
+            border: 0; border-radius: 0; overflow: visible;
+            box-shadow: none;
+            max-width: none; margin: 0;
+        }
+        .examples-media {
+            position: relative;
+            margin: 0 -1.5rem;
+        }
+        .examples-track {
+            display: flex; gap: 0; padding: 1.25rem 18%;
+            overflow-x: auto; overflow-y: hidden;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .examples-track::-webkit-scrollbar { display: none; }
+        .examples-track > .result-card {
+            position: relative;
+            flex: 0 0 auto;
+            width: auto;
+            max-width: none; /* the card hugs its video, so captions and centering match what is drawn */
+            margin-right: -8%;
+            border: 0; border-radius: 0;
+            box-shadow: none; background: transparent;
+            transform: scale(0.9);
+            opacity: 0.5;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            scroll-snap-align: center; scroll-snap-stop: always;
+            overflow: visible;
+            z-index: 1;
+        }
+        .examples-track > .result-card:last-child {
+            margin-right: 0;
+        }
+        .examples-track > .result-card.is-active {
+            transform: scale(1);
+            opacity: 1;
+            z-index: 3;
+        }
+        .examples-track > .result-card:hover {
+            box-shadow: none;
+        }
+        .examples-carousel .video-player {
+            width: auto;
+            height: auto;
+            aspect-ratio: auto;
+            background: transparent;
+            display: block;
+            overflow: visible;
+        }
+        .examples-carousel .video-player video {
+            display: block;
+            width: auto;
+            height: min(480px, 55vh);
+            max-width: min(900px, 78vw);
+            object-fit: contain;
+            background: transparent;
+            border-radius: 10px;
+        }
+        /* Caption sits over the top of the video so it never covers the native controls bar */
+        .examples-carousel .rc-caption {
+            position: absolute; left: 0; right: 0; top: 0;
+            padding: 0.85rem 1.1rem 2.2rem;
+            border: 0; background: linear-gradient(rgba(15,23,42,0.78), transparent);
+            color: #fff; pointer-events: none;
+            border-radius: 10px 10px 0 0;
+            z-index: 3; /* above the video (z-index 2); clicks still reach the video */
+        }
+        .examples-carousel .rc-caption b { color: #fff; }
+        /* Very wide side-by-side clips: same 16:9 frame (and so the same card size and spacing) as the other
+           carousels, with the clip centred on a white card */
+        .examples-carousel.wide-clips .video-player video { aspect-ratio: 16 / 9; background: #ffffff; }
+        .examples-carousel .rc-caption p { color: rgba(255,255,255,0.85); margin: 0.2rem 0 0; }
+        .examples-carousel .dataset-nav {
+            background: rgba(15,23,42,0.85);
+            z-index: 6;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .examples-carousel .dataset-nav.prev { left: 0.75rem; }
+        .examples-carousel .dataset-nav.next { right: 0.75rem; }
+        .examples-carousel .dataset-nav:disabled {
+            opacity: 0.55;
+        }
+        /* slide counters ("1 / N") hidden on all carousels */
+        .dataset-carousel-count { display: none !important; }
+        .examples-carousel .dataset-carousel-count {
+            bottom: auto; top: 1.1rem; z-index: 6;
+        }
+        @media (max-width: 700px) {
+            .examples-media { margin: 0 -0.75rem; }
+            .examples-track { padding: 1rem 8%; }
+            .examples-track > .result-card { max-width: 92%; margin-right: -6%; }
+            .examples-carousel .video-player video {
+                height: min(300px, 45vh);
+                max-width: min(100%, 88vw);
+            }
+        }
+        .dataset-video-fallback {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 0.75rem; min-height: 280px; padding: 2rem; background: #ffffff; color: #6b7280;
+            text-align: center;
+        }
+        .dataset-video-fallback svg { width: 3rem; height: 3rem; color: #9ca3af; }
+        .dataset-video-fallback .ph-title { font-size: 1.1rem; font-weight: 600; color: #374151; }
+        .dataset-video-fallback .ph-note { font-size: 0.85rem; color: #9ca3af; }
+        .dataset-video-fallback[hidden] { display: none !important; }
+    </style>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-image">
+                    <img src="assets/social_humanoid_logo.jpeg" alt="Social Humanoid">
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <h2>Social Humanoid</h2>
+                <a href="#teaser" class="nav-item active">Overview</a>
+                <a href="#abstract" class="nav-item">Abstract</a>
+                <a href="#contributions" class="nav-item">Three Gaps</a>
+                <a href="#data" class="nav-item">HHI Benchmark</a>
+                <a href="#method" class="nav-item">Method</a>
+                <a href="#denoising" class="nav-item">Denoising Schedule</a>
+                <a href="#embodiment_translation" class="nav-item">Embodiment Translation</a>
+                <a href="#shadow_teleoperation" class="nav-item">Shadow Teleoperation</a>
+                <a href="#results" class="nav-item">Real-World Results</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section id="teaser" class="hero-section">
+                <h2>Social Humanoid</h2>
+                <h3 class="hero-description" style="margin-top: 0.75rem;">Socially Responsive Human&ndash;Humanoid Interaction</h3>
+                <div class="hero-venue">
+                    <span class="venue-tag" aria-label="Accepted to Conference on Robot Learning 2026">
+                        CoRL <span class="venue-year">2026</span>
+                    </span>
+                </div>
+                <p class="hero-authors">
+                    <a href="https://people.eecs.berkeley.edu/~vongani_maluleke/">Vongani H. Maluleke</a><sup>&sect;</sup>,
+                    <a href="https://jaynye.github.io/">James Ni</a><sup>&sect;</sup>,
+                    <a href="https://www.linkedin.com/in/kie-horiuchi-95b58434a/">Kie Horiuchi</a><sup>&dagger;</sup>,
+                    <a href="https://muelea.github.io/">Lea Wilken</a><sup>&Dagger;</sup>,
+                    <a href="https://jiahuilei.com/">Jiahui Lei</a><sup>&sect;</sup>,
+                    <a href="https://evonneng.github.io/">Evonne Ng</a><sup>&Dagger;</sup>,
+                    <br>
+                    <a href="https://roeiherz.github.io/">Roei Herzig</a><sup>&sect;</sup>,
+                    <a href="https://people.eecs.berkeley.edu/~malik/">Jitendra Malik</a><sup>&sect;</sup>,
+                    <a href="https://people.eecs.berkeley.edu/~trevor/">Trevor Darrell</a><sup>&sect;</sup>,
+                    <a href="https://people.eecs.berkeley.edu/~kanazawa/">Angjoo Kanazawa</a><sup>&sect;</sup>
+                </p>
+                <p class="hero-affiliations">UC Berkeley<sup>&sect;</sup> &middot; Sony Group Corporation<sup>&dagger;</sup> &middot; Meta<sup>&Dagger;</sup> 
+
+
+                <div class="hero-links">
+                    <a href="assets/Social_Humanoid.pdf" class="hero-btn primary" target="_blank" rel="noopener">
+                        <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3.8423 0a1.0037 1.0037 0 0 0-.922.6078c-.1536.3687-.0438.6275.2938 1.1113l6.9185 8.3597-1.0223 1.1058a1.0393 1.0393 0 0 0 .003 1.4229l1.2292 1.3135-5.4391 6.4444c-.2803.299-.4538.823-.2971 1.1986a1.0253 1.0253 0 0 0 .9585.635.9133.9133 0 0 0 .6891-.3405l5.783-6.126 7.4902 8.0051a.8527.8527 0 0 0 .6835.2597.9575.9575 0 0 0 .8777-.6138c.1577-.377-.017-.7502-.306-1.1407l-7.0518-8.3418 1.0632-1.13a.9626.9626 0 0 0 .0089-1.3165L4.6336.4639s-.3733-.4535-.768-.463zm0 .272h.0166c.2179.0052.4874.2715.5644.3639l.005.006.0052.0055 10.169 10.9905a.6915.6915 0 0 1-.0072.945l-1.0666 1.133-1.4982-1.7724-8.5994-10.39c-.3286-.472-.352-.6183-.2592-.841a.7307.7307 0 0 1 .6704-.4401Zm14.341 1.5701a.877.877 0 0 0-.6554.2418l-5.6962 6.1584 1.6944 1.8319 5.3089-6.5138c.3251-.4335.479-.6603.3247-1.0292a1.1205 1.1205 0 0 0-.9763-.689zm-7.6557 12.2823 1.3186 1.4135-5.7864 6.1295a.6494.6494 0 0 1-.4959.26.7516.7516 0 0 1-.706-.4669c-.1119-.2682.0359-.6864.2442-.9083l.0051-.0055.0047-.0055z"></path>
+                        </svg>
+                        Paper
+                    </a>
+                    <span class="hero-btn" aria-disabled="true" title="Code release coming soon">
+                        <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+                        </svg>
+                        Code <span class="soon">Soon</span>
+                    </span>
+                    <span class="hero-btn" aria-disabled="true" title="Data release coming soon">
+                        <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12.025 1.13c-5.77 0-10.449 4.647-10.449 10.378 0 1.112.178 2.181.503 3.185.064-.222.203-.444.416-.577a.96.96 0 0 1 .524-.15c.293 0 .584.124.84.284.278.173.48.408.71.694.226.282.458.611.684.951v-.014c.017-.324.106-.622.264-.874s.403-.487.762-.543c.3-.047.596.06.787.203s.31.313.4.467c.15.257.212.468.233.542.01.026.653 1.552 1.657 2.54.616.605 1.01 1.223 1.082 1.912.055.537-.096 1.059-.38 1.572.637.121 1.294.187 1.967.187.657 0 1.298-.063 1.921-.178-.287-.517-.44-1.041-.384-1.581.07-.69.465-1.307 1.081-1.913 1.004-.987 1.647-2.513 1.657-2.539.021-.074.083-.285.233-.542.09-.154.208-.323.4-.467a1.08 1.08 0 0 1 .787-.203c.359.056.604.29.762.543s.247.55.265.874v.015c.225-.34.457-.67.683-.952.23-.286.432-.52.71-.694.257-.16.547-.284.84-.285a.97.97 0 0 1 .524.151c.228.143.373.388.43.625l.006.04a10.3 10.3 0 0 0 .534-3.273c0-5.731-4.678-10.378-10.449-10.378M8.327 6.583a1.5 1.5 0 0 1 .713.174 1.487 1.487 0 0 1 .617 2.013c-.183.343-.762-.214-1.102-.094-.38.134-.532.914-.917.71a1.487 1.487 0 0 1 .69-2.803m7.486 0a1.487 1.487 0 0 1 .689 2.803c-.385.204-.536-.576-.916-.71-.34-.12-.92.437-1.103.094a1.487 1.487 0 0 1 .617-2.013 1.5 1.5 0 0 1 .713-.174m-10.68 1.55a.96.96 0 1 1 0 1.921.96.96 0 0 1 0-1.92m13.838 0a.96.96 0 1 1 0 1.92.96.96 0 0 1 0-1.92M8.489 11.458c.588.01 1.965 1.157 3.572 1.164 1.607-.007 2.984-1.155 3.572-1.164.196-.003.305.12.305.454 0 .886-.424 2.328-1.563 3.202-.22-.756-1.396-1.366-1.63-1.32q-.011.001-.02.006l-.044.026-.01.008-.03.024q-.018.017-.035.036l-.032.04a1 1 0 0 0-.058.09l-.014.025q-.049.088-.11.19a1 1 0 0 1-.083.116 1.2 1.2 0 0 1-.173.18q-.035.029-.075.058a1.3 1.3 0 0 1-.251-.243 1 1 0 0 1-.076-.107c-.124-.193-.177-.363-.337-.444-.034-.016-.104-.008-.2.022q-.094.03-.216.087-.06.028-.125.063l-.13.074q-.067.04-.136.086a3 3 0 0 0-.135.096 3 3 0 0 0-.26.219 2 2 0 0 0-.12.121 2 2 0 0 0-.106.128l-.002.002a2 2 0 0 0-.09.132l-.001.001a1.2 1.2 0 0 0-.105.212q-.013.036-.024.073c-1.139-.875-1.563-2.317-1.563-3.203 0-.334.109-.457.305-.454m.836 10.354c.824-1.19.766-2.082-.365-3.194-1.13-1.112-1.789-2.738-1.789-2.738s-.246-.945-.806-.858-.97 1.499.202 2.362c1.173.864-.233 1.45-.685.64-.45-.812-1.683-2.896-2.322-3.295s-1.089-.175-.938.647 2.822 2.813 2.562 3.244-1.176-.506-1.176-.506-2.866-2.567-3.49-1.898.473 1.23 2.037 2.16c1.564.932 1.686 1.178 1.464 1.53s-3.675-2.511-4-1.297c-.323 1.214 3.524 1.567 3.287 2.405-.238.839-2.71-1.587-3.216-.642-.506.946 3.49 2.056 3.522 2.064 1.29.33 4.568 1.028 5.713-.624m5.349 0c-.824-1.19-.766-2.082.365-3.194 1.13-1.112 1.789-2.738 1.789-2.738s.246-.945.806-.858.97 1.499-.202 2.362c-1.173.864.233 1.45.685.64.451-.812 1.683-2.896 2.322-3.295s1.089-.175.938.647-2.822 2.813-2.562 3.244 1.176-.506 1.176-.506 2.866-2.567 3.49-1.898-.473 1.23-2.037 2.16c-1.564.932-1.686 1.178-1.464 1.53s3.675-2.511 4-1.297c.323 1.214-3.524 1.567-3.287 2.405.238.839 2.71-1.587 3.216-.642.506.946-3.49 2.056-3.522 2.064-1.29.33-4.568 1.028-5.713-.624"/>
+                        </svg>
+                        Data <span class="soon">Soon</span>
+                    </span>
+                </div>
+
+            </section>
+
+            <!-- Teaser Video -->
+            <section class="section">
+                <div class="teaser-video" style="max-width: 1100px;">
+                    <div class="video-player">
+                        <video src="assets/Teaser_SH.mp4" autoplay loop muted playsinline controls preload="auto"></video>
+                    </div>
+                    <p class="teaser-caption">
+                        <b>Social Humanoid</b> lets a humanoid perceive, anticipate, and respond to the people around it, from handshakes and high-fives to hugs, waves, and bows. We retarget 260 hours of human&ndash;human interaction onto a Unitree G1 with contact and reach preserved, learn a motion vocabulary shared by humans and humanoids, and generate the robot&rsquo;s response from live RGB-D video in real time.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Abstract Section -->
+            <section id="abstract" class="section">
+                <div class="section-header">
+                    <h3>Abstract</h3>
+                </div>
+                <div class="abstract-card">
+                    <p>Humanoid robots are typically trained as solitary agents, leaving them unable to coordinate physically with human partners who naturally anticipate and adjust to one another. To bridge this gap, we present <b>Social Humanoid</b>, a hierarchical system that generates and executes socially responsive whole-body motion on a 29-DoF Unitree G1 conditioned on a human partner's motion. Our approach decomposes the problem into a high-level policy and a low-level policy. For the high-level policy, we introduce a <b>shared-codebook VQ-VAE</b> that tokenizes human and humanoid motion into a unified latent space, enabling cross-embodiment conditional generation via a <b>Diffusion Forcing Transformer</b>. The low-level policy uses a whole-body tracking controller for deployment on the Unitree G1.</p>
+                    <p>To train the system, we introduce a <b>two-phase adaptive retargeting</b> procedure that retargets one interaction partner to the robot while morphing the other partner to preserve contact dynamics, reachability, and relative body scale. We apply this procedure across five motion-capture datasets to produce a new <b>Human-Humanoid Interaction (HHI) benchmark of 260 hours</b> of paired human-humanoid interactions. Our results demonstrate that Social Humanoid produces coordinated, human-aligned behavior across diverse interaction types in simulation and the real world.</p>
+                </div>
+            </section>
+
+            <!-- Contributions: the three gaps, animated -->
+            <section id="contributions" class="section">
+                <div class="gaps-head">
+                    <div class="section-header">
+                        <h3>From Human&ndash;Human to Human&ndash;Humanoid</h3>
+                        <p>Human motion models can already generate realistic two-person interactions offline. Moving that to a physical humanoid exposes three gaps. Social Humanoid addresses each one.</p>
+                    </div>
+                    <button type="button" class="gaps-play" id="gaps-play"></button>
+                </div>
+                <div class="gap-grid" id="gap-grid"></div>
+            </section>
+
+
+            <!-- HHI Benchmark / Data Section -->
+            <section id="data" class="section">
+              <div class="section-header">
+                  <h3>HHI Benchmark</h3>
+                  <p>Five motion-capture datasets, converted into paired human&ndash;humanoid interactions for the Unitree G1 by adaptive retargeting.</p>
+              </div>
+
+              <div class="hhi-card">
+                  <div class="hhi-hero">
+                      <div class="big">260<small>hours</small></div>
+                      <p><b>28.1M frames</b> of paired human&ndash;humanoid interaction for the <b>29-DoF Unitree G1</b>, with contact, reach, and relative scale preserved.</p>
+                  </div>
+                  <div class="hhi-label">Built from</div>
+                  <div class="hhi-sources">
+                      <div class="hhi-src"><strong>CHI3D</strong><span>Close-contact pairs: hugs, handshakes, pushes</span></div>
+                      <div class="hhi-src"><strong>Hi4D</strong><span>Physically close pairs with dense body contact</span></div>
+                      <div class="hhi-src"><strong>Harmony4D</strong><span>In-the-wild interactions such as dancing and wrestling</span></div>
+                      <div class="hhi-src"><strong>Inter-X</strong><span>Diverse everyday interactions</span></div>
+                      <div class="hhi-src"><strong>Embody3D</strong><span>Conversations and social activities among groups</span></div>
+                  </div>
+              </div>
+
+              <h4 class="card-title">Adaptive Retargeting</h4>
+              <p class="results-note"><b>Pass I</b> retargets the ego human to the G1, using contact-adaptive weights that keep the joints that matter for the interaction accurate. <b>Pass II</b> co-morphs the partner to match the G1&rsquo;s shorter body, so contact, reach, and relative scale survive in hugs, high-fives, and linked-arm poses.</p>
+
+              <figure class="sh-figure figure-pad">
+                  <div class="retarget-legend" aria-label="Mesh color legend">
+                      <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#6b86cc;"></span>Partner</span>
+                      <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#ecc172;"></span>Ego</span>
+                      <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#c2ceea;"></span>Morphed Partner</span>
+                      <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#e2cca2;"></span>Retargeted Humanoid</span>
+                  </div>
+                  <img src="assets/images/Adaptive-HHI Retargeting.png" alt="Interaction-aware retargeting: input human-human interaction, ego-to-robot retargeting, and partner co-morphing.">
+                  <figcaption><b>Two-phase adaptive retargeting.</b> Starting from a human&ndash;human capture, the ego is retargeted to the G1 (<b>Pass I</b>), then the partner is co-morphed to the robot&rsquo;s proportions (<b>Pass II</b>), turning human&ndash;human motion capture into human&ndash;humanoid training data.</figcaption>
+              </figure>
+
+              <h4 class="card-title">Retargeting Results</h4>
+
+              <div class="examples-carousel" data-side-carousel>
+                  <div class="examples-media">
+                      <button type="button" class="dataset-nav prev" aria-label="Previous video"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                      <div class="examples-track">
+                          <div class="result-card">
+                              <div class="video-player"><video src="assets/retargeting_results/interx_G001T003A016R005_High_five_0.mov" loop muted playsinline controls preload="metadata"></video></div>
+                              <div class="rc-caption"><b>High-Five</b><p>Inter-X</p></div>
+                          </div>
+                          <div class="result-card">
+                              <div class="video-player"><video src="assets/retargeting_results/Hi4d_backhug15_0.mov" loop muted playsinline controls preload="metadata"></video></div>
+                              <div class="rc-caption"><b>Back Hug</b><p>Hi4D</p></div>
+                          </div>
+                          <div class="result-card">
+                              <div class="video-player"><video src="assets/retargeting_results/Hi4d_highfive19_1.mov" loop muted playsinline controls preload="metadata"></video></div>
+                              <div class="rc-caption"><b>High-Five</b><p>Hi4D</p></div>
+                          </div>
+                          <div class="result-card">
+                              <div class="video-player"><video src="assets/retargeting_results/interx_G001T005A025R000_Carry_on_back_0.mov" loop muted playsinline controls preload="metadata"></video></div>
+                              <div class="rc-caption"><b>Carry on Back</b><p>Inter-X</p></div>
+                          </div>
+                          <div class="result-card">
+                              <div class="video-player"><video src="assets/retargeting_results/interx_G059T005A035R013_Help_up_1.mov" loop muted playsinline controls preload="metadata"></video></div>
+                              <div class="rc-caption"><b>Help Up</b><p>Inter-X</p></div>
+                          </div>
+                      </div>
+                      <button type="button" class="dataset-nav next" aria-label="Next video"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                      <div class="dataset-carousel-count" aria-live="polite"></div>
+                  </div>
+              </div>
+              <div class="retarget-more">
+                  <button type="button" class="retarget-more-btn" id="retarget-gallery-open" aria-haspopup="dialog">View more retargeted motions</button>
+              </div>
+              <dialog class="retarget-gallery" id="retarget-gallery" aria-labelledby="retarget-gallery-title">
+                  <div class="rg-head">
+                      <h4 id="retarget-gallery-title">All retargeted motions <span>23 clips &middot; 5 datasets &middot; hover to play, click to enlarge</span></h4>
+                      <button type="button" class="rg-close" id="retarget-gallery-close" aria-label="Close">&times;</button>
+                  </div>
+                  <div class="rg-filters" role="toolbar" aria-label="Filter by motion">
+                      <button type="button" class="rg-chip active" data-rg-filter="all" aria-pressed="true">All <span>23</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="hug" aria-pressed="false">Hugs <span>6</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="handshake" aria-pressed="false">Handshakes <span>4</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="highfive" aria-pressed="false">High-Fives <span>3</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="assist" aria-pressed="false">Assist <span>2</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="posing" aria-pressed="false">Posing <span>3</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="sparring" aria-pressed="false">Sparring <span>3</span></button>
+                      <button type="button" class="rg-chip" data-rg-filter="social" aria-pressed="false">Dance &amp; Social <span>2</span></button>
+                  </div>
+                  <div class="rg-body">
+                      <div class="rg-grid">
+                          <figure class="rg-item" data-rg-cat="hug" data-full="assets/retargeting_results/Hi4d_backhug15_0.mov" tabindex="0" role="button" aria-label="Back Hug, Hi4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Hi4d_backhug15_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Back Hug</b><span>Hi4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="hug" data-full="assets/retargeting_results/Chi3d_Hug_1_1.mov" tabindex="0" role="button" aria-label="Hug, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Hug_1_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Hug</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="hug" data-full="assets/retargeting_results/Chi3d_Hug_3_1.mov" tabindex="0" role="button" aria-label="Hug, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Hug_3_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Hug</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="hug" data-full="assets/retargeting_results/Hi4d_hug09_0.mov" tabindex="0" role="button" aria-label="Hug, Hi4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Hi4d_hug09_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Hug</b><span>Hi4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="hug" data-full="assets/retargeting_results/Harmony4d_01_hugging__002_hugging_0.mov" tabindex="0" role="button" aria-label="Hug, Harmony4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Harmony4d_01_hugging__002_hugging_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Hug</b><span>Harmony4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="hug" data-full="assets/retargeting_results/interx_G023T000A000R003_Hug_1.mov" tabindex="0" role="button" aria-label="Hug, Inter-X: play enlarged"><video data-src="assets/retargeting_results/catalogue/interx_G023T000A000R003_Hug_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Hug</b><span>Inter-X</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="handshake" data-full="assets/retargeting_results/Chi3d_Handshake_1_1.mov" tabindex="0" role="button" aria-label="Handshake, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Handshake_1_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Handshake</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="handshake" data-full="assets/retargeting_results/Chi3d_Handshake_2_0.mov" tabindex="0" role="button" aria-label="Handshake, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Handshake_2_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Handshake</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="handshake" data-full="assets/retargeting_results/Chi3d_Handshake_6_1.mov" tabindex="0" role="button" aria-label="Handshake, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Handshake_6_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Handshake</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="handshake" data-full="assets/retargeting_results/interx_G001T000A001R005_Handshake_0.mov" tabindex="0" role="button" aria-label="Handshake, Inter-X: play enlarged"><video data-src="assets/retargeting_results/catalogue/interx_G001T000A001R005_Handshake_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Handshake</b><span>Inter-X</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="highfive" data-full="assets/retargeting_results/Hi4d_highfive19_1.mov" tabindex="0" role="button" aria-label="High-Five, Hi4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Hi4d_highfive19_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>High-Five</b><span>Hi4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="highfive" data-full="assets/retargeting_results/interx_G001T003A016R005_High_five_0.mov" tabindex="0" role="button" aria-label="High-Five, Inter-X: play enlarged"><video data-src="assets/retargeting_results/catalogue/interx_G001T003A016R005_High_five_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>High-Five</b><span>Inter-X</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="highfive" data-full="assets/retargeting_results/interx_G001T003A016R007_High_five_0.mov" tabindex="0" role="button" aria-label="High-Five, Inter-X: play enlarged"><video data-src="assets/retargeting_results/catalogue/interx_G001T003A016R007_High_five_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>High-Five</b><span>Inter-X</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="assist" data-full="assets/retargeting_results/interx_G001T005A025R000_Carry_on_back_0.mov" tabindex="0" role="button" aria-label="Carry on Back, Inter-X: play enlarged"><video data-src="assets/retargeting_results/catalogue/interx_G001T005A025R000_Carry_on_back_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Carry on Back</b><span>Inter-X</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="assist" data-full="assets/retargeting_results/interx_G059T005A035R013_Help_up_1.mov" tabindex="0" role="button" aria-label="Help Up, Inter-X: play enlarged"><video data-src="assets/retargeting_results/catalogue/interx_G059T005A035R013_Help_up_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Help Up</b><span>Inter-X</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="posing" data-full="assets/retargeting_results/Chi3d_Posing_6_0.mov" tabindex="0" role="button" aria-label="Posing, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Posing_6_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Posing</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="posing" data-full="assets/retargeting_results/Chi3d_Posing_8_0.mov" tabindex="0" role="button" aria-label="Posing, CHI3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Chi3d_Posing_8_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Posing</b><span>CHI3D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="posing" data-full="assets/retargeting_results/Hi4d_pose32_1.mov" tabindex="0" role="button" aria-label="Posing, Hi4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Hi4d_pose32_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Posing</b><span>Hi4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="sparring" data-full="assets/retargeting_results/Hi4d_fight00_1.mov" tabindex="0" role="button" aria-label="Fight, Hi4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Hi4d_fight00_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>Fight</b><span>Hi4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="sparring" data-full="assets/retargeting_results/Harmony4d_13_mma2__016_mma2_1.mov" tabindex="0" role="button" aria-label="MMA Sparring, Harmony4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Harmony4d_13_mma2__016_mma2_1.mp4" loop muted playsinline preload="none"></video><figcaption><b>MMA Sparring</b><span>Harmony4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="sparring" data-full="assets/retargeting_results/Harmony4d_15_mma4__021_mma4_0.mov" tabindex="0" role="button" aria-label="MMA Sparring, Harmony4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Harmony4d_15_mma4__021_mma4_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>MMA Sparring</b><span>Harmony4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="social" data-full="assets/retargeting_results/Harmony4d_08_ballroom2__001_ballroom2_0.mov" tabindex="0" role="button" aria-label="Ballroom Dance, Harmony4D: play enlarged"><video data-src="assets/retargeting_results/catalogue/Harmony4d_08_ballroom2__001_ballroom2_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Ballroom Dance</b><span>Harmony4D</span></figcaption></figure>
+                          <figure class="rg-item" data-rg-cat="social" data-full="assets/retargeting_results/embody3d_DYADIC__aiagent__c--20250505--1139--RUZ038--PDZ643--pilot--MotionPrior2--PROXEMICS_AIAGENT_scene_165--033683-039082_0.mov" tabindex="0" role="button" aria-label="Proxemics, Embody3D: play enlarged"><video data-src="assets/retargeting_results/catalogue/embody3d_DYADIC__aiagent__c--20250505--1139--RUZ038--PDZ643--pilot--MotionPrior2--PROXEMICS_AIAGENT_scene_165--033683-039082_0.mp4" loop muted playsinline preload="none"></video><figcaption><b>Proxemics</b><span>Embody3D</span></figcaption></figure>
+                      </div>
+                  </div>
+                  <div class="rg-viewer" id="rg-viewer" hidden>
+                      <div class="rg-viewer-box">
+                          <button type="button" class="rg-close rg-viewer-close" aria-label="Close enlarged video">&times;</button>
+                          <video loop muted playsinline controls></video>
+                          <p class="rg-viewer-cap"></p>
+                      </div>
+                  </div>
+              </dialog>
+          </section>
+          
+
+            <!-- Method Section -->
+            <section id="method" class="section">
+                <div class="section-header">
+                    <h3>Method</h3>
+                    <p>A high-level policy generates the humanoid&rsquo;s coordinated response; a low-level whole-body tracking controller executes it on the G1.</p>
+                </div>
+  
+
+                <h4 class="card-title">System Overview</h4>
+                <figure class="sh-figure figure-pad">
+                    <img src="assets/images/system_overview.png" loading="lazy" decoding="async" alt="Social Humanoid pipeline: streaming RGB-D video is reconstructed into body motion, a high-level diffusion-forcing policy generates the coordinated humanoid response, and a low-level Sonic policy executes it on the real Unitree G1.">
+                    <figcaption><strong>System overview.</strong> A calibrated RGB-D camera streams the human partner, whose body motion is reconstructed in 3D. The <strong>high-level policy</strong> encodes human and robot motion with shared-codebook encoders (E<sub>h</sub>, E<sub>r</sub>), predicts the future interaction with a Diffusion Forcing Transformer (DFoT), and decodes it (D<sub>h</sub>, D<sub>r</sub>) into a coordinated humanoid response. The <strong>low-level policy</strong>, the SONIC whole-body tracking controller, then executes this motion on the G1 in simulation and in the real world.</figcaption>
+                </figure>
+
+
+                <h4 class="card-title">Shared-codebook VQ-VAE</h4>
+                <p class="results-note">Human and humanoid motion live in different kinematic spaces. Embodiment-specific encoders map each into continuous latents, which are quantized against <b>one shared EMA codebook</b>; continuous and discrete alignment losses push paired poses onto the same codes. Embodiment-specific decoders then reconstruct each body from the shared tokens.</p>
+                <figure class="sh-figure figure-pad">
+                    <img src="assets/images/shared_vqvae.png" alt="Shared-codebook VQ-VAE: embodiment-specific encoders map human and robot pose into a single shared codebook of size K, then embodiment-specific decoders reconstruct each pose.">
+                    <figcaption><strong>Shared-codebook VQ-VAE.</strong> Human and robot poses are encoded separately but quantized against one codebook of size K, so corresponding poses map to the same tokens. This <strong>cross-embodiment</strong> vocabulary lets the downstream policy reason about the interaction rather than the difference between bodies.</figcaption>
+                </figure>
+
+                <h4 class="card-title">Sequence Modeling of Human&ndash;Humanoid Interaction</h4>
+                <p class="results-note">
+                    Given the observed history of human and humanoid motion, DFoT predicts the future motion of both agents. During training, context frames stay clean while every future frame is noised independently per agent and per timestep, which prevents the model from taking shortcuts. At inference, autoregressive DDIM sampling with a flexible noise schedule supports joint future generation, partner prediction, and partner inpainting, all without retraining.
+                </p>
+            
+            </section>
+
+            <!-- DFoT denoising schedules: partner prediction + joint (occlusion) -->
+            <section id="denoising" class="section">
+                <div class="section-header">
+                    <h3>Denoising Schedule</h3>
+                    <p>An illustration of how DFoT assigns noise to each token, both when reacting to an observed human and when generating both futures while the human is occluded.</p>
+                </div>
+
+                <div class="dfot-container">
+                    <div class="dfot-wrapper">
+                        <div class="dfot-tabs">
+                            <button type="button" class="dfot-tab active" id="tabPartnerPred">Reactive Motion Generation</button>
+                            <button type="button" class="dfot-tab" id="tabJoint">Joint Future Generation</button>
+                        </div>
+
+                        <div class="dfot-viz">
+                            <div class="dfot-description" id="dfotDescription">
+                                <div class="dfot-description-title">
+                                    <span id="dfotDescTitle">Reactive Motion Generation</span>
+                                </div>
+                                <p class="dfot-description-text" id="dfotDescText">
+                                    Generate the <span class="dfot-description-highlight">humanoid&rsquo;s reaction</span> to the observed human: the robot&rsquo;s future is conditioned on both agents&rsquo; past and the human&rsquo;s motion over the same window.
+                                    <br><br>
+                                    <span class="dfot-description-formula">P(B<sub>t:t+L</sub> | A<sub>0:t+L</sub>, B<sub>0:t−1</sub>)</span>
+                                    <br><br>
+                                    Robot tokens are denoised with <span class="dfot-description-highlight">causal uncertainty</span>: at every step, nearer tokens are less noisy than farther ones, so the response firms up from the present outward. Each human token becomes clean (observed) as its robot token begins denoising.
+                                </p>
+                            </div>
+
+                            <div class="dfot-viz-content">
+                                <div class="dfot-main">
+                                    <div class="dfot-yaxis-label">
+                                        <span>Denoising Steps</span>
+                                    </div>
+                                    <div class="dfot-content">
+                                        <div class="dfot-xaxis-title">Time</div>
+                                        <div class="dfot-xaxis-labels" id="xAxisLabels"></div>
+                                        <div class="dfot-grid">
+                                            <div class="dfot-yaxis-numbers" id="yAxisNumbers"></div>
+                                            <div class="dfot-rows" id="gridRows"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dfot-legend">
+                                    <div class="dfot-legend-item">
+                                        <div class="dfot-legend-color" style="background: hsl(0, 70%, 30%); border: 2px solid hsl(0, 100%, 50%)"></div>
+                                        <span class="dfot-legend-text">A: human (clean)</span>
+                                    </div>
+                                    <div class="dfot-legend-item">
+                                        <div class="dfot-legend-color" style="background: hsl(210, 70%, 30%); border: 2px solid hsl(210, 100%, 50%)"></div>
+                                        <span class="dfot-legend-text">B: humanoid (clean)</span>
+                                    </div>
+                                    <div class="dfot-legend-item">
+                                        <div class="dfot-legend-color dfot-noisy-legend" style="background: #1a1a1a; position: relative; overflow: hidden;">
+                                            <canvas id="noisyLegendCanvas" width="16" height="16" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+                                        </div>
+                                        <span class="dfot-legend-text">Noisy</span>
+                                    </div>
+                                </div>
+
+                                <div class="dfot-controls-bar">
+                                    <div class="dfot-controls">
+                                        <button type="button" class="dfot-btn dfot-btn-play" id="playBtn">⏸ Pause</button>
+                                        <button type="button" class="dfot-btn dfot-btn-reset" id="resetBtn">Reset</button>
+                                        <div class="dfot-speed">
+                                            <label for="speedSlider">Speed:</label>
+                                            <input type="range" id="speedSlider" min="0.5" max="3" step="0.5" value="1">
+                                            <span id="speedValue">1x</span>
+                                        </div>
+                                        <span class="dfot-frame">Frame: <span id="frameCount">0</span>/<span id="totalFrames">200</span></span>
+                                    </div>
+                                    <div class="dfot-timeline">
+                                        <label for="timelineSlider">Timeline:</label>
+                                        <input type="range" id="timelineSlider" min="0" max="199" step="1" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+             <!-- Embodiment Translation Section -->
+             <section id="embodiment_translation" class="section">
+                <div class="section-header">
+                    <h3>Embodiment Translation</h3>
+                    <p>Translating motion between human and humanoid bodies with the shared-codebook VQ-VAE.</p>
+                </div>
+                <div class="retarget-legend legend-spaced" aria-label="Mesh color legend">
+                    <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#d81b43;"></span>Input Human</span>
+                    <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#9b4dde;"></span>Translated Humanoid</span>
+                    <span class="retarget-legend-item"><span class="retarget-legend-swatch" style="background:#c0c4c8;"></span>Real G1 Deployment</span>
+                </div>
+                <div class="examples-carousel wide-clips" data-side-carousel>
+                    <div class="examples-media">
+                        <button type="button" class="dataset-nav prev" aria-label="Previous example"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                        <div class="examples-track">
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/H-R_paired/hr_dance.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Dance</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/H-R_paired/hr_squat.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Squat</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/H-R_paired/hr_chase.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Chase</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/H-R_paired/hr_hip_hop.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Hip-Hop</b></div>
+                            </div>
+                        </div>
+                        <button type="button" class="dataset-nav next" aria-label="Next example"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                        <div class="dataset-carousel-count" aria-live="polite"></div>
+                    </div>
+                </div>
+                <p class="section-note">Because both bodies share one discrete vocabulary, encoding a human motion and decoding it as a humanoid (or the reverse) gives a coherent translation.</p>
+          </section>
+
+
+            <!-- Shadow Teleoperation Section -->
+            <section id="shadow_teleoperation" class="section">
+                <div class="section-header">
+                    <h3>Shadow Teleoperation</h3>
+                    <p>Shadow teleoperation of a Unitree G1, enabled by the shared-codebook VQ-VAE.</p>
+                </div>
+                <div class="examples-carousel" data-side-carousel>
+                    <div class="examples-media">
+                        <button type="button" class="dataset-nav prev" aria-label="Previous example"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                        <div class="examples-track">
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/shadow_teleops_web/wave_MG.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Wave</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/shadow_teleops_web/random_hand_moves.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Hand Movements</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/shadow_teleops_web/wave_at_people.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Wave at People</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/shadow_teleops_web/sitting_on_couch.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Sitting on a Couch</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/shadow_teleops_web/standing_up_from_couch.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Standing Up from a Couch</b></div>
+                            </div>
+                        </div>
+                        <button type="button" class="dataset-nav next" aria-label="Next example"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                        <div class="dataset-carousel-count" aria-live="polite"></div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Video Results Section -->
+            <section id="results" class="section">
+               
+              <div class="section-header">
+                    <h3>Real-World Results</h3>
+                    <p>Social Humanoid running live on a Unitree G1, from camera input to whole-body motion.</p>
+                </div>
+
+                <h4 class="card-title">Hardware Demos</h4>
+                <div class="examples-carousel" data-side-carousel>
+                    <div class="examples-media">
+                        <button type="button" class="dataset-nav prev" aria-label="Previous result"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                        <div class="examples-track">
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/handshake_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Handshake</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos/handshake_LW.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Handshake</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos/high_five_LW_short.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>High-Five</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos/hug_LW.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Hug</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos/react_ZM.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>React</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos/handshake_bend_ZM.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Handshake + Bow</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/front_wave_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Wave</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/respond_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Respond</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/highfive_walk_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Walk &amp; High-Five</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/walk_high_five_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Approach &amp; High-Five</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos/handshake_walk_bend_ZM.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Walk, Handshake &amp; Bend</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/approach_bow_walk_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Bow &amp; Walk Together</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/wave_walk_towards_handshake_bow_react_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Wave, Handshake &amp; Bow</b></div>
+                            </div>
+                            <div class="result-card">
+                                <div class="video-player">
+                                    <video src="assets/demos_blurred/walkaround_KS.mp4" loop muted playsinline controls preload="metadata"></video>
+                                </div>
+                                <div class="rc-caption"><b>Walk Around</b></div>
+                            </div>
+                        </div>
+                        <button type="button" class="dataset-nav next" aria-label="Next result"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                        <div class="dataset-carousel-count" aria-live="polite"></div>
+                    </div>
+                </div>
+                <p class="section-note">One system, many behaviors: handshakes, hugs, high-fives, waves, bows, reactions, and walking together.</p>
+            </section>
+
+            <!-- Acknowledgements -->
+            <section id="acknowledgements" class="section">
+                <div class="section-header">
+                    <h3>Acknowledgements</h3>
+                </div>
+                <div class="acknowledgements-card">
+                    <p class="acknowledgements-text">
+                        We thank Zeldah Maluleke, <a href="https://kaito-suzuki-cs.vercel.app/" target="_blank">Kaito Suzuki</a>, Marsalis Gibson and Sharmita Dey for serving as the human partner in our real-world demonstrations and assisting with recording the demonstrations, and Zekai Wang and our BAIR colleagues for helpful discussions. This project was funded in part by BAIR sponsors, Bakar Fellows, NSF CAREER award no 2442491, the Humanoid Intelligence Center program, ONR MURI N00014-21-1-280, and MURI N000142612024
+                    </p>
+                </div>
+            </section>
+
+            <!-- Citation -->
+            <section id="citation" class="section">
+                <div class="section-header">
+                    <h3>Citation</h3>
+                    <p>If you find this work useful, please cite:</p>
+                </div>
+                <div class="bibtex-box">
+                    <button type="button" class="bibtex-copy" id="bibtex-copy" aria-label="Copy BibTeX">Copy</button>
+                    <pre id="bibtex-text">@inproceedings{maluleke2026socialhumanoid,
+  title     = {Social Humanoid: Socially Responsive Human--Humanoid Interaction},
+  author    = {Maluleke, Vongani H. and Ni, James and Horiuchi, Kie and Wilken, Lea
+               and Lei, Jiahui and Ng, Evonne and Herzig, Roei 
+               and Malik, Jitendra and Darrell, Trevor and Kanazawa, Angjoo},
+  booktitle = {Conference on Robot Learning (CoRL)},
+  year      = {2026}
+}</pre>
+                </div>
+                <!-- <p class="results-note" style="margin-top: 1.5rem;">
+                    <a href="assets/Social_Humanoid.pdf" target="_blank" rel="noopener">Download the paper (PDF)</a>
+                    &nbsp;&middot;&nbsp; Code and HHI data release coming soon.
+                </p> -->
+            </section>
+
+        </main>
+    </div>
+
+    <script src="assets/dfot-denoising.js"></script>
+    <script>
+    // Smooth-scroll + scrollspy for the sidebar navigation
+    (function () {
+        const navItems = Array.from(document.querySelectorAll('.nav-item'));
+        const sections = navItems
+            .map(a => document.querySelector(a.getAttribute('href')))
+            .filter(Boolean);
+
+        navItems.forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        const setActive = id => {
+            navItems.forEach(a =>
+                a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+        };
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) setActive(entry.target.id);
+            });
+        }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+        sections.forEach(s => observer.observe(s));
+    })();
+
+    // Shared side carousel (full-bleed or sliding band)
+    function setupSideCarousel(root, options = {}) {
+        const track = root.querySelector(options.trackSelector || '.dataset-video-grid, .examples-track');
+        const slides = track ? Array.from(track.children) : [];
+        const prevBtn = root.querySelector('.dataset-nav.prev');
+        const nextBtn = root.querySelector('.dataset-nav.next');
+        const countEl = root.querySelector('.dataset-carousel-count');
+        if (!track || !slides.length) return null;
+
+        const bandMode = root.classList.contains('examples-carousel') || options.bandMode;
+        const startIndex = slides.length > 1 ? 1 : 0;
+        let index = startIndex;
+        const videos = () => slides.map(slide =>
+            slide.matches('video') ? slide : slide.querySelector('video')).filter(Boolean);
+
+        const scrollLeftFor = (i) => {
+            if (!bandMode) return track.clientWidth * i;
+            const slide = slides[i];
+            if (!slide) return 0;
+            const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+            return Math.max(0, slideCenter - track.clientWidth / 2);
+        };
+
+        const nearestIndex = () => {
+            if (!bandMode) {
+                return Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+            }
+            const center = track.scrollLeft + track.clientWidth / 2;
+            let best = 0;
+            let bestDist = Infinity;
+            slides.forEach((slide, i) => {
+                const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+                const dist = Math.abs(slideCenter - center);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    best = i;
+                }
+            });
+            return best;
+        };
+
+        const updateChrome = () => {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('is-active', i === index);
+            });
+            if (prevBtn) {
+                prevBtn.disabled = index <= 0;
+                prevBtn.hidden = slides.length <= 1;
+            }
+            if (nextBtn) {
+                nextBtn.disabled = index >= slides.length - 1;
+                nextBtn.hidden = slides.length <= 1;
+            }
+            if (countEl) {
+                countEl.textContent = slides.length > 1 ? `${index + 1} / ${slides.length}` : '';
+                countEl.hidden = slides.length <= 1;
+            }
+        };
+
+        const playActive = (shouldPlay) => {
+            videos().forEach((video) => {
+                const slide = video.closest('.result-card') || video;
+                const slideIndex = slides.indexOf(slide);
+                if (slideIndex === index && shouldPlay) {
+                    video.currentTime = 0;
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            });
+        };
+
+        const goTo = (nextIndex, shouldPlay, behavior = 'smooth') => {
+            index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+            track.scrollTo({ left: scrollLeftFor(index), behavior });
+            updateChrome();
+            playActive(shouldPlay);
+        };
+
+        prevBtn?.addEventListener('click', () => goTo(index - 1, true));
+        nextBtn?.addEventListener('click', () => goTo(index + 1, true));
+
+        let scrollTimer = null;
+        track.addEventListener('scroll', () => {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                const next = Math.max(0, Math.min(slides.length - 1, nearestIndex()));
+                if (next !== index) {
+                    index = next;
+                    updateChrome();
+                    playActive(true);
+                } else {
+                    updateChrome();
+                }
+            }, 80);
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            track.scrollTo({ left: scrollLeftFor(index), behavior: 'auto' });
+        });
+
+        const syncStart = () => goTo(startIndex, false, 'auto');
+        syncStart();
+        requestAnimationFrame(syncStart);
+        // Re-center after video metadata sizes the slides
+        videos().forEach(video => {
+            if (video.readyState >= 1) return;
+            video.addEventListener('loadedmetadata', syncStart, { once: true });
+        });
+
+        return {
+            reset: () => goTo(startIndex, true, 'auto'),
+            pauseAll: () => videos().forEach(v => v.pause()),
+        };
+    }
+
+    // Standalone example carousels (e.g. Translation Examples)
+    document.querySelectorAll('[data-side-carousel]').forEach(root => {
+        setupSideCarousel(root);
+    });
+
+    // Dataset tab switcher + per-panel video carousel
+    (function () {
+        const showcase = document.querySelector('.dataset-showcase');
+        if (!showcase) return;
+
+        const tabs = Array.from(showcase.querySelectorAll('[data-dataset-tab]'));
+        const panels = Array.from(showcase.querySelectorAll('[data-dataset-panel]'));
+
+        panels.forEach(panel => {
+            const carousel = panel.querySelector('.examples-carousel');
+            if (!carousel) return;
+            panel._datasetCarousel = setupSideCarousel(carousel, { bandMode: true });
+        });
+
+        const activate = (id) => {
+            tabs.forEach(tab => {
+                const selected = tab.dataset.datasetTab === id;
+                tab.classList.toggle('active', selected);
+                tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+            });
+            panels.forEach(panel => {
+                const active = panel.dataset.datasetPanel === id;
+                panel.classList.toggle('active', active);
+                panel.hidden = !active;
+                if (active) panel._datasetCarousel?.reset();
+                else panel._datasetCarousel?.pauseAll();
+            });
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => activate(tab.dataset.datasetTab));
+        });
+
+        if (tabs.length) activate(tabs[0].dataset.datasetTab);
+    })();
+
+    // Retargeting "view all" catalogue: small pre-cropped clips load on first open; hover/focus grows a tile
+    // and plays it; click opens the full-resolution original in a viewer
+    (function () {
+        const dlg = document.getElementById('retarget-gallery');
+        const openBtn = document.getElementById('retarget-gallery-open');
+        const closeBtn = document.getElementById('retarget-gallery-close');
+        if (!dlg || !openBtn || typeof dlg.showModal !== 'function') return;
+        const body = dlg.querySelector('.rg-body');
+        const items = Array.from(dlg.querySelectorAll('.rg-item'));
+        const chips = Array.from(dlg.querySelectorAll('[data-rg-filter]'));
+        const viewer = document.getElementById('rg-viewer');
+        const viewerVid = viewer.querySelector('video');
+        const viewerCap = viewer.querySelector('.rg-viewer-cap');
+        let loaded = false;
+
+        const zoom = (it, on) => {
+            const v = it.querySelector('video');
+            if (on) {
+                // grow away from the grid edges so the enlarged tile isn't clipped
+                const r = it.getBoundingClientRect(), g = body.getBoundingClientRect();
+                const ox = r.left - g.left < r.width * 0.6 ? 'left' : g.right - r.right < r.width * 0.6 ? 'right' : 'center';
+                const oy = r.top - g.top < r.height * 0.6 ? 'top' : g.bottom - r.bottom < r.height * 0.6 ? 'bottom' : 'center';
+                it.style.transformOrigin = `${ox} ${oy}`;
+                it.classList.add('is-zoomed');
+                v.play().catch(() => {});
+            } else {
+                it.classList.remove('is-zoomed');
+                v.pause();
+            }
+        };
+        items.forEach(it => {
+            it.addEventListener('mouseenter', () => zoom(it, true));
+            it.addEventListener('mouseleave', () => zoom(it, false));
+            it.addEventListener('focus', () => zoom(it, true));
+            it.addEventListener('blur', () => zoom(it, false));
+            const open = () => {
+                zoom(it, false);
+                viewerVid.src = it.dataset.full;
+                viewerCap.textContent = it.querySelector('figcaption').textContent.replace(/\s+/g, ' ').trim();
+                viewer.hidden = false;
+                viewerVid.play().catch(() => {});
+            };
+            it.addEventListener('click', open);
+            it.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+        });
+        const closeViewer = () => {
+            if (viewer.hidden) return false;
+            viewerVid.pause(); viewerVid.removeAttribute('src'); viewerVid.load();
+            viewer.hidden = true;
+            return true;
+        };
+        viewer.querySelector('.rg-viewer-close').addEventListener('click', closeViewer);
+        viewer.addEventListener('click', e => { if (e.target === viewer) closeViewer(); });
+
+        chips.forEach(chip => chip.addEventListener('click', () => {
+            const cat = chip.dataset.rgFilter;
+            chips.forEach(c => {
+                c.classList.toggle('active', c === chip);
+                c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
+            });
+            items.forEach(it => { it.hidden = cat !== 'all' && it.dataset.rgCat !== cat; });
+            body.scrollTop = 0;
+        }));
+
+        openBtn.addEventListener('click', () => {
+            document.querySelectorAll('video').forEach(v => { if (!dlg.contains(v)) v.pause(); });
+            dlg.showModal();
+            if (!loaded) {
+                // 640x360 clips (~200 KB each): load all so every tile shows its first frame
+                items.forEach(it => { const v = it.querySelector('video'); v.src = v.dataset.src; v.preload = 'auto'; });
+                loaded = true;
+            }
+        });
+        closeBtn.addEventListener('click', () => dlg.close());
+        dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+        // Esc closes the viewer first, then the catalogue
+        dlg.addEventListener('cancel', e => { if (closeViewer()) e.preventDefault(); });
+        dlg.addEventListener('close', () => {
+            closeViewer();
+            items.forEach(it => zoom(it, false));
+        });
+    })();
+
+    // BibTeX copy
+    (function () {
+        const btn = document.getElementById('bibtex-copy');
+        const textEl = document.getElementById('bibtex-text');
+        if (!btn || !textEl) return;
+        btn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(textEl.textContent.trim());
+                btn.textContent = 'Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 1600);
+            } catch (_) {
+                btn.textContent = 'Select & copy';
+            }
+        });
+    })();
+    </script>
+    <!-- Three Gaps: SMPL + Unitree G1 meshes and the three.js animation -->
+    <script src="assets/gaps/smpl_neutral.js"></script>
+    <script src="assets/gaps/g1_29dof.js"></script>
+    <script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+    <script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const V3 = THREE.Vector3, Q = THREE.Quaternion;
+
+// ------------------------------------------------------------------
+// Helpers
+// ------------------------------------------------------------------
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+const seg = (t, a, b) => ease(clamp((t - a) / (b - a), 0, 1));
+const rad = d => (d * Math.PI) / 180;
+const deg = r => (r * 180) / Math.PI;
+const hash = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453; return (s - Math.floor(s)) * 2 - 1; };
+const mid2 = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+const dist2 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+const b64 = (s, T) => { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new T(u.buffer); };
+function lerpPose(a, b, t) { const o = {}; for (const k in a) o[k] = lerp(a[k], b[k] ?? a[k], t); return o; }
+function lerpCol(a, b, t) { const A = a.split(',').map(Number), B = b.split(',').map(Number); return A.map((v, i) => Math.round(lerp(v, B[i], t))).join(','); }
+
+const W = 900, H = 1200;
+const TEAL = '59,126,161', BLUE = '59,91,219', ORANGE = '234,88,12', RED = '220,38,38', INK = '31,41,55';
+const UP = new V3(0, 1, 0);
+
+// Story poses. Angles in degrees: 0 = down, 90 = forward, 180 = up.
+// "R" = near arm/leg (the one that interacts), "L" = the other side.
+const IDLE = { lean: 0, sR: 6, eR: 14, sL: -4, eL: 12, hR: 4, kR: -3, hL: -3, kL: -2 };
+
+function walkPose(ph, a) {
+    const s = Math.sin(ph), c = -s;
+    return {
+        ...IDLE,
+        hR: 2 + 18 * s * a, kR: -3 - 22 * a * Math.max(0, Math.sin(ph - 1.2)),
+        hL: -2 + 18 * c * a, kL: -3 - 22 * a * Math.max(0, Math.sin(ph + Math.PI - 1.2)),
+        sR: 6 - 16 * s * a, sL: -4 - 16 * c * a,
+    };
+}
+
+function dancePose(t) {
+    const w = 2.4, b = 0.5 + 0.5 * Math.sin(2 * w * t);
+    return {
+        lean: 4 * Math.sin(w * t),
+        sR: 105 + 55 * Math.sin(w * t), eR: 45 + 35 * Math.sin(2 * w * t + 1),
+        sL: 70 + 50 * Math.sin(w * t + Math.PI), eL: 40 + 30 * Math.sin(2 * w * t),
+        hR: 8 + 10 * b, kR: -4 - 26 * b, hL: -4 + 10 * b, kL: -2 - 26 * b,
+    };
+}
+
+// Planar two-link IK (shoulder frame: dx forward, dy down-positive)
+function armIK2(dx, dy, a, b) {
+    const d = clamp(Math.hypot(dx, dy), 1e-4, a + b - 1e-4);
+    const ang = deg(Math.atan2(dx, dy));
+    const alpha = deg(Math.acos(clamp((a * a + d * d - b * b) / (2 * a * d), -1, 1)));
+    const beta = deg(Math.acos(clamp((a * a + b * b - d * d) / (2 * a * b), -1, 1)));
+    return { s: ang - alpha, e: 180 - beta };
+}
+
+// ------------------------------------------------------------------
+// Renderer, scene, stage
+// ------------------------------------------------------------------
+// One WebGL renderer draws each panel in turn; each panel copies the frame
+// into its own 2D canvas and draws its overlay effects on top.
+const glCanvas = document.createElement('canvas');
+let ctx = null;
+
+const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true });
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const BG = 0xf3f5f8;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(BG);
+scene.fog = new THREE.Fog(BG, 7, 17);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(30, 3 / 4, 0.1, 50);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0xdfe5ee, 1.2));
+const key = new THREE.DirectionalLight(0xffffff, 2.0);
+key.position.set(1.8, 4.5, 3.2);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { left: -3, right: 3, top: 3, bottom: -1, near: 0.5, far: 12 });
+key.shadow.bias = -0.0004;
+key.shadow.radius = 4;
+scene.add(key);
+const rimTeal = new THREE.DirectionalLight(0xffffff, 0.8);
+rimTeal.position.set(-4, 2.5, -3);
+scene.add(rimTeal);
+const rimOrange = new THREE.DirectionalLight(0xffffff, 0.5);
+rimOrange.position.set(4, 2.0, -3);
+scene.add(rimOrange);
+
+// Floor: a light studio floor with a faint grid and soft contact shadows
+const grid = new THREE.GridHelper(40, 80, 0xd1d5db, 0xe5e7eb);
+grid.material.transparent = true; grid.material.opacity = 0.7; grid.position.y = 0.003;
+scene.add(grid);
+const shadowFloor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.ShadowMaterial({ opacity: 0.16 }));
+shadowFloor.rotation.x = -Math.PI / 2; shadowFloor.position.y = 0.004; shadowFloor.receiveShadow = true;
+scene.add(shadowFloor);
+
+// ------------------------------------------------------------------
+// Shader extras: dissolve, vertex noise, fresnel rim
+// ------------------------------------------------------------------
+const FX_MATS = [];
+function enhance(mat) {
+    const u = {
+        uDissolve: { value: 0 }, uEdge: { value: new THREE.Color(0x5eead4) },
+        uNoise: { value: 0 }, uTime: { value: 0 },
+        uRim: { value: new THREE.Color(0x2dd4bf) }, uRimStr: { value: 0 },
+    };
+    mat.userData.u = u;
+    mat.onBeforeCompile = sh => {
+        Object.assign(sh.uniforms, u);
+        sh.vertexShader = 'uniform float uNoise; uniform float uTime; varying vec3 vWPos;\n' + sh.vertexShader
+            .replace('#include <skinning_vertex>', `#include <skinning_vertex>
+                if (uNoise > 0.0) {
+                    vec3 cell = floor(transformed * 14.0) + floor(uTime * 12.0);
+                    float h = fract(sin(dot(cell, vec3(12.9898, 78.233, 37.719))) * 43758.5453);
+                    transformed += (vec3(h, fract(h * 7.31), fract(h * 13.7)) - 0.5) * uNoise;
+                }`)
+            .replace('#include <project_vertex>', `#include <project_vertex>
+                vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
+        sh.fragmentShader = 'uniform float uDissolve; uniform vec3 uEdge; uniform vec3 uRim; uniform float uRimStr; varying vec3 vWPos;\n'
+            + 'float dHash(vec3 p) { return fract(sin(dot(floor(p * 38.0), vec3(12.9898, 78.233, 37.719))) * 43758.5453); }\n'
+            + sh.fragmentShader
+                .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+                    float dn = dHash(vWPos);
+                    if (dn < uDissolve) discard;`)
+                .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+                    float fres = pow(1.0 - abs(dot(normalize(vViewPosition), normal)), 2.4);
+                    totalEmissiveRadiance += uRim * uRimStr * fres;
+                    if (uDissolve > 0.001 && dn < uDissolve + 0.07) totalEmissiveRadiance += uEdge * 3.0;`);
+    };
+    FX_MATS.push(mat);
+    return mat;
+}
+const setFx = (mats, k, v) => mats.forEach(m => {
+    const u = m.userData.u[k];
+    if (u.value && u.value.isColor) u.value.set(v); else u.value = v;
+});
+
+// ------------------------------------------------------------------
+// SMPL human (skinned)
+// ------------------------------------------------------------------
+const SM = window.GAPS_SMPL;
+const SJ = SM.joints.map(p => new V3(...p));
+const smplGeo = new THREE.BufferGeometry();
+smplGeo.setAttribute('position', new THREE.BufferAttribute(b64(SM.pos, Float32Array), 3));
+smplGeo.setIndex(new THREE.BufferAttribute(b64(SM.idx, Uint16Array), 1));
+smplGeo.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(Array.from(b64(SM.skinIdx, Uint8Array)), 4));
+smplGeo.setAttribute('skinWeight', new THREE.BufferAttribute(b64(SM.skinW, Float32Array), 4));
+smplGeo.computeVertexNormals();
+smplGeo.computeBoundingBox();
+const SMPL_FLOOR = smplGeo.boundingBox.min.y;
+const ANKLE_H = SJ[7].y - SMPL_FLOOR;
+const SIDES = {
+    right: { hip: 2, knee: 5, ankle: 8, foot: 11, sho: 17, elb: 19, wri: 21, hand: 23 },
+    left: { hip: 1, knee: 4, ankle: 7, foot: 10, sho: 16, elb: 18, wri: 20, hand: 22 },
+};
+const S_UA = SJ[19].distanceTo(SJ[17]), S_FA = SJ[21].distanceTo(SJ[19]) + 0.08;
+
+function makeHuman(material) {
+    const bones = SJ.map(() => new THREE.Bone());
+    SM.parents.forEach((p, i) => {
+        if (p < 0) bones[i].position.copy(SJ[i]);
+        else { bones[i].position.copy(SJ[i]).sub(SJ[p]); bones[p].add(bones[i]); }
+    });
+    const mesh = new THREE.SkinnedMesh(smplGeo, material);
+    mesh.add(bones[0]);
+    mesh.bind(new THREE.Skeleton(bones));
+    mesh.castShadow = true;
+    mesh.frustumCulled = false;
+    const group = new THREE.Group();
+    group.add(mesh);
+    scene.add(group);
+    return { group, mesh, bones, mats: [material] };
+}
+
+const _q = new Q(), _qp = new Q(), _qd = new Q(), _v = new V3(), _v2 = new V3();
+function aimBone(bone, child, dir) {
+    bone.getWorldQuaternion(_q);
+    _v.copy(child.position).applyQuaternion(_q).normalize();
+    _qd.setFromUnitVectors(_v, _v2.copy(dir).normalize());
+    _q.premultiply(_qd);
+    bone.parent.getWorldQuaternion(_qp);
+    bone.quaternion.copy(_qp.invert().multiply(_q));
+}
+function rotBoneWorld(bone, axis, ang) {
+    bone.getWorldQuaternion(_q);
+    _q.premultiply(_qd.setFromAxisAngle(axis, ang));
+    bone.parent.getWorldQuaternion(_qp);
+    bone.quaternion.copy(_qp.invert().multiply(_q));
+}
+const wpos = (o, out = new V3()) => o.getWorldPosition(out);
+
+// Pose a human from story angles; the near arm can follow a 3D IK target.
+// Optional: turn (extra yaw toward the camera, radians), jump (metres off the floor), and sideways
+// spread in degrees for the arms (aR/aL) and legs (bR/bL). All default to 0.
+function poseHuman(Hm, p) {
+    const { group, bones } = Hm;
+    const f = p.facing, turn = p.turn || 0;
+    group.position.set(p.x, 0, p.z);
+    group.rotation.y = (f > 0 ? Math.PI / 2 : -Math.PI / 2) + turn;
+    group.updateMatrixWorld(true);
+    bones.forEach(b => b.quaternion.identity());
+
+    const fwd = new V3(f, 0, 0).applyAxisAngle(UP, turn), right = new V3().crossVectors(fwd, UP);
+    const dirAt = (a, side) => fwd.clone().multiplyScalar(Math.sin(rad(a))).addScaledVector(UP, -Math.cos(rad(a))).addScaledVector(side, 0.1).normalize();
+    const legDir = a => fwd.clone().multiplyScalar(Math.sin(rad(a))).addScaledVector(UP, -Math.cos(rad(a)));
+    // swing a limb direction out sideways (towards `side`) by `ab` degrees
+    const spread = (d, side, ab) => (ab ? d.applyAxisAngle(new V3().crossVectors(UP.clone().negate(), side).normalize(), rad(ab)) : d);
+    const sideOf = L => (L === SIDES.right ? right.clone() : right.clone().negate());
+
+    for (const b of [3, 6, 9]) rotBoneWorld(bones[b], right, -rad(p.lean) / 3);
+
+    const near = SIDES[p.near || 'right'], far = SIDES[p.near === 'left' ? 'right' : 'left'];
+    const footRest = SJ[11].clone().sub(SJ[8]).applyQuaternion(group.quaternion).normalize();
+    for (const [L, h, k, b] of [[near, p.hR, p.kR, p.bR], [far, p.hL, p.kL, p.bL]]) {
+        aimBone(bones[L.hip], bones[L.knee], spread(legDir(h), sideOf(L), b));
+        aimBone(bones[L.knee], bones[L.ankle], spread(legDir(h + k), sideOf(L), b));
+        aimBone(bones[L.ankle], bones[L.foot], footRest);
+    }
+    group.updateMatrixWorld(true);
+    const ay = Math.min(wpos(bones[near.ankle]).y, wpos(bones[far.ankle]).y);
+    group.position.y += ANKLE_H - ay + (p.jump || 0);
+    group.updateMatrixWorld(true);
+
+    const out = {};
+    for (const [L, sA, eA, ik, key, ab] of [[near, p.sR, p.eR, p.ik, 'handN', p.aR], [far, p.sL, p.eL, null, 'handF', p.aL]]) {
+        const side = sideOf(L);
+        const S = wpos(bones[L.sho]);
+        let E = S.clone().addScaledVector(spread(dirAt(sA, side), side, ab), S_UA);
+        let Hp = E.clone().addScaledVector(spread(dirAt(sA + eA, side.clone().multiplyScalar(0.3)), side, ab), S_FA);
+        if (ik && ik.w > 0) {
+            const T = ik.target, d0 = T.clone().sub(S), d = clamp(d0.length(), 1e-4, S_UA + S_FA - 1e-4);
+            const dir = d0.normalize();
+            const cosA = clamp((S_UA * S_UA + d * d - S_FA * S_FA) / (2 * S_UA * d), -1, 1);
+            const pole = UP.clone().negate().addScaledVector(side, 0.6).addScaledVector(fwd, -0.2);
+            const pv = pole.sub(dir.clone().multiplyScalar(pole.dot(dir))).normalize();
+            const Eik = S.clone().addScaledVector(dir, S_UA * cosA).addScaledVector(pv, S_UA * Math.sqrt(1 - cosA * cosA));
+            const Hik = S.clone().addScaledVector(dir, d);
+            E.lerp(Eik, ik.w); Hp.lerp(Hik, ik.w);
+        }
+        aimBone(bones[L.sho], bones[L.elb], E.clone().sub(S));
+        bones[L.elb].updateWorldMatrix(true, false);
+        aimBone(bones[L.elb], bones[L.wri], Hp.clone().sub(wpos(bones[L.elb])));
+        out[key] = Hp;
+    }
+    bones[0].updateMatrixWorld(true);
+    out.head = wpos(bones[15]);
+    out.chest = wpos(bones[9]);
+    return out;
+}
+
+// ------------------------------------------------------------------
+// Unitree G1 (29-DoF) from its URDF
+// ------------------------------------------------------------------
+const GD = window.GAPS_G1;
+const g1Geos = GD.meshes.map(m => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(b64(m.pos, Float32Array), 3));
+    g.setIndex(new THREE.BufferAttribute(b64(m.idx, Uint16Array), 1));
+    g.computeVertexNormals();
+    return g;
+});
+
+function makeRobot(matFor) {
+    const outer = new THREE.Group();
+    const up = new THREE.Group();
+    up.rotation.x = -Math.PI / 2;
+    outer.add(up);
+    const links = {}, joints = {}, mats = [];
+    const linkObj = name => {
+        const o = new THREE.Group();
+        const L = GD.links[name];
+        if (L) {
+            const mat = matFor(L.rgba, name);
+            mats.push(mat);
+            const mesh = new THREE.Mesh(g1Geos[L.mesh], mat);
+            mesh.castShadow = true;
+            o.add(mesh);
+        }
+        links[name] = o;
+        return o;
+    };
+    const byParent = {};
+    GD.joints.forEach(j => (byParent[j.parent] ||= []).push(j));
+    const build = (name, obj) => {
+        for (const j of byParent[name] || []) {
+            const jo = new THREE.Group();
+            jo.position.set(...j.xyz);
+            jo.rotation.set(j.rpy[0], j.rpy[1], j.rpy[2], 'ZYX');
+            const motion = new THREE.Group();
+            jo.add(motion);
+            const child = linkObj(j.child);
+            motion.add(child);
+            obj.add(jo);
+            joints[j.name] = { motion, axis: new V3(...j.axis).normalize() };
+            build(j.child, child);
+        }
+    };
+    const root = linkObj(GD.root);
+    up.add(root);
+    build(GD.root, root);
+    scene.add(outer);
+    return { outer, links, joints, mats };
+}
+const setJ = (R, name, q) => { const j = R.joints[name]; if (j) j.motion.quaternion.setFromAxisAngle(j.axis, q); };
+
+let G_UA = 0.19, G_FA = 0.27;
+function measureRobot(R) {
+    R.outer.updateMatrixWorld(true);
+    const S = wpos(R.joints.left_shoulder_pitch_joint.motion), E = wpos(R.joints.left_elbow_joint.motion);
+    const Wr = wpos(R.joints.left_wrist_yaw_joint.motion);
+    G_UA = S.distanceTo(E);
+    G_FA = Wr.distanceTo(E) + 0.08;
+}
+
+// Same optional turn / jump / spread (aR/aL arms, bR/bL legs) as poseHuman; the spread drives the
+// robot's real shoulder-roll and hip-roll joints (outward is + on the left side, - on the right).
+function poseRobot(R, p) {
+    const f = p.facing, near = p.near || 'right', far = near === 'left' ? 'right' : 'left', turn = p.turn || 0;
+    const out = s => (s === 'left' ? 1 : -1);
+    R.outer.position.set(p.x, 0, p.z);
+    R.outer.rotation.y = (f > 0 ? 0 : Math.PI) + turn;
+    const legs = [[near, p.hR, p.kR, p.bR || 0], [far, p.hL, p.kL, p.bL || 0]];
+    for (const [s, h, k, b] of legs) {
+        const hp = -rad(h), kn = -rad(k);
+        setJ(R, `${s}_hip_pitch_joint`, hp);
+        setJ(R, `${s}_knee_joint`, kn);
+        setJ(R, `${s}_ankle_pitch_joint`, -(hp + kn));
+        if (b) { setJ(R, `${s}_hip_roll_joint`, out(s) * rad(b)); setJ(R, `${s}_ankle_roll_joint`, -out(s) * rad(b)); }
+    }
+    setJ(R, 'waist_pitch_joint', rad(p.lean));
+    const arm = (s, sA, eA, ab = 0) => {
+        setJ(R, `${s}_shoulder_pitch_joint`, -rad(sA));
+        setJ(R, `${s}_shoulder_roll_joint`, out(s) * (0.12 + rad(ab)));
+        setJ(R, `${s}_elbow_joint`, Math.PI / 2 - rad(eA));
+    };
+    arm(far, p.sL, p.eL, p.aL);
+    arm(near, p.sR, p.eR, p.aR);
+    // stand on the floor first, so the arm IK sees the real shoulder height
+    R.outer.updateMatrixWorld(true);
+    const ay = Math.min(wpos(R.joints.left_ankle_roll_joint.motion).y, wpos(R.joints.right_ankle_roll_joint.motion).y);
+    R.outer.position.y += 0.036 - ay + (p.jump || 0);
+    R.outer.updateMatrixWorld(true);
+    const S = wpos(R.joints[`${near}_shoulder_pitch_joint`].motion);
+    const fwd = new V3(f, 0, 0).applyAxisAngle(UP, turn);
+    let sA = p.sR, eA = p.eR;
+    if (p.ik && p.ik.w > 0) {
+        const T = p.ik.target;
+        const sol = armIK2(T.clone().sub(S).dot(fwd), S.y - T.y, G_UA, G_FA);
+        sA = lerp(sA, sol.s, p.ik.w); eA = lerp(eA, sol.e, p.ik.w);
+    }
+    arm(near, sA, eA, p.aR);
+    R.outer.updateMatrixWorld(true);
+    const S2 = wpos(R.joints[`${near}_shoulder_pitch_joint`].motion);
+    const dA = a => fwd.clone().multiplyScalar(Math.sin(rad(a))).addScaledVector(UP, -Math.cos(rad(a)));
+    const handN = S2.clone().addScaledVector(dA(sA), G_UA).addScaledVector(dA(sA + eA), G_FA);
+    return { handN, sho: S2, sR: sA, eR: eA, head: wpos(R.links.head_link || R.links.torso_link).add(new V3(0, 0.35, 0)), chest: wpos(R.links.torso_link).add(new V3(0, 0.2, 0)) };
+}
+
+// ------------------------------------------------------------------
+// Cast
+// ------------------------------------------------------------------
+// Matte, clay-like surfaces (no gloss or reflections)
+const humanMat = (tint) => enhance(new THREE.MeshStandardMaterial({
+    color: tint, roughness: 1, metalness: 0, envMapIntensity: 0.35,
+}));
+const robotMat = (rgba, name) => {
+    const dark = rgba[0] < 0.4;
+    return enhance(new THREE.MeshStandardMaterial({
+        color: dark ? 0x2b3340 : 0xd7dde5, roughness: 0.95, metalness: 0, envMapIntensity: 0.35, flatShading: true,
+    }));
+};
+const ghostMat = () => enhance(new THREE.MeshBasicMaterial({ color: 0xf97316, transparent: true, opacity: 0.2, depthWrite: false }));
+
+// Same palette as the retargeting renders: blue and orange humans
+const HA = makeHuman(humanMat(0x4c6fd8));
+const HB = makeHuman(humanMat(0xe8913a));
+// Depth-only copy of HB, drawn between the humanoid and HB's colour pass while HB fades out, so the fading
+// human reads as one clean translucent surface instead of showing its own far arm and inner faces.
+// (transparent so it sorts after the humanoid, which stays visible inside the human.)
+// polygonOffset pushes its depth back a hair so HB's own colour pass (a different shader) always passes the
+// depth test instead of z-fighting with it, while HB's back surfaces are still hidden.
+const HB_DEPTH = new THREE.SkinnedMesh(HB.mesh.geometry, new THREE.MeshBasicMaterial({
+    colorWrite: false, transparent: true, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 4,
+}));
+HB_DEPTH.bind(HB.mesh.skeleton, HB.mesh.bindMatrix);
+HB_DEPTH.frustumCulled = false; HB_DEPTH.renderOrder = 1; HB_DEPTH.visible = false;
+HB.group.add(HB_DEPTH);
+// Act iii's generated human response: a separate, permanently translucent body
+const HG = makeHuman(humanMat(0xe8913a));
+const HW = makeHuman(new THREE.MeshBasicMaterial({ color: 0x003262, wireframe: true, transparent: true, opacity: 0.35, depthWrite: false }));
+HW.mesh.castShadow = false;
+const RB = makeRobot(robotMat);
+setFx(RB.mats, 'uEdge', 0xfb923c);
+const GHOSTS = [0, 1, 2].map(() => {
+    const g = makeRobot(() => ghostMat());
+    g.outer.traverse(o => { if (o.isMesh) o.castShadow = false; });
+    return g;
+});
+measureRobot(RB);
+
+const show = (obj, v) => { (obj.group || obj.outer).visible = v; };
+const ghostly = (Hm, on, op = 0.32) => Hm.mats.forEach(m => { m.transparent = on; m.opacity = on ? op : 1; m.depthWrite = !on; });
+// Fade a whole body in or out (1 = solid); the meshes are shared, so every scene sets this for the bodies it
+// shows. keepDepth = false stops a fading body from writing depth: otherwise a nearly invisible body still
+// hides anything inside it (e.g. the humanoid emerging inside the human during a cross-fade).
+// Toggling `transparent` must also flag needsUpdate: three.js compiles opaque materials with a shader that
+// forces alpha to 1, and won't switch shaders on its own, so a fading body would sometimes render solid.
+const fadeBody = (obj, a, keepDepth = true) => obj.mats.forEach(m => {
+    const tr = a < 0.999;
+    if (m.transparent !== tr) { m.transparent = tr; m.needsUpdate = true; }
+    m.opacity = a; m.depthWrite = keepDepth || !tr;
+});
+ghostly(HG, true);
+
+// ------------------------------------------------------------------
+// 2D effects layer
+// ------------------------------------------------------------------
+let NOW = 0;
+const proj = v => { const p = v.clone().project(camera); return { x: (p.x + 1) / 2 * W, y: (1 - p.y) / 2 * H }; };
+
+function bloom(p, r, col, a) {
+    if (a <= 0.01) return;
+    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+    g.addColorStop(0, `rgba(${col},${a * 0.45})`);
+    g.addColorStop(0.35, `rgba(${col},${a * 0.18})`);
+    g.addColorStop(1, `rgba(${col},0)`);
+    ctx.save();  ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 7); ctx.fill(); ctx.restore();
+}
+function burst(p, dt, c1, c2) {
+    if (dt < 0 || dt > 1) return;
+    const a = 1 - dt;
+    ctx.save();  ctx.lineCap = 'round';
+    ctx.strokeStyle = `rgba(${c1},${a})`; ctx.lineWidth = 3 * a + 0.5;
+    ctx.beginPath(); ctx.arc(p.x, p.y, 20 + ease(dt) * 260, 0, 7); ctx.stroke();
+    for (let i = 0; i < 18; i++) {
+        const ang = (i / 18) * Math.PI * 2 + 0.2, r0 = 26 + ease(dt) * 190, r1 = r0 + 70 * a;
+        ctx.strokeStyle = `rgba(${i % 2 ? c1 : c2},${a})`; ctx.lineWidth = 2.2 * a + 0.4;
+        ctx.beginPath();
+        ctx.moveTo(p.x + Math.cos(ang) * r0, p.y + Math.sin(ang) * r0);
+        ctx.lineTo(p.x + Math.cos(ang) * r1, p.y + Math.sin(ang) * r1);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+function sparks(p, dt, n, seed) {
+    if (dt < 0 || dt > 1.1) return;
+    ctx.save();  ctx.lineCap = 'round';
+    for (let i = 0; i < n; i++) {
+        const a = Math.abs(hash(seed + i * 1.3)) * Math.PI * 2, sp = 220 + Math.abs(hash(seed + i * 2.7)) * 380;
+        const x = p.x + Math.cos(a) * sp * dt, y = p.y + Math.sin(a) * sp * dt + 520 * dt * dt;
+        const vx = Math.cos(a) * sp, vy = Math.sin(a) * sp + 1040 * dt;
+        ctx.strokeStyle = `rgba(${i % 3 ? RED : ORANGE},${clamp(1 - dt / 1.1, 0, 1)})`; ctx.lineWidth = 2.2;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - vx * 0.03, y - vy * 0.03); ctx.stroke();
+    }
+    ctx.restore();
+}
+function bez(a, b, f, lift) {
+    const c = { x: (a.x + b.x) / 2, y: Math.min(a.y, b.y) + lift }, u = 1 - f;
+    return { x: u * u * a.x + 2 * u * f * c.x + f * f * b.x, y: u * u * a.y + 2 * u * f * c.y + f * f * b.y };
+}
+
+// ------------------------------------------------------------------
+// Act I — Data: a handshake, broken by naive retargeting, restored by adaptation
+// ------------------------------------------------------------------
+const RS_SCALE = 1; // robot is its real size (≈1.32 m) next to an average SMPL body (≈1.7 m)
+
+function actData(t) {
+    hideManifolds();
+    show(HA, true); show(HB, true); show(RB, true); show(HW, false); GHOSTS.forEach(g => show(g, false));
+    show(HG, false); setFx(HB.mats, 'uNoise', 0); setFx(HA.mats, 'uNoise', 0); setFx(HA.mats, 'uDissolve', 0);
+    const walk = seg(t, 0, 1.4), reach = seg(t, 1.1, 2.0);
+    const m = seg(t, 4.0, 5.3), c = seg(t, 7.6, 9.0);
+    const bob = 0.02 * Math.sin(t * 12) * (seg(t, 2.0, 2.3) * (1 - seg(t, 3.3, 3.7)) + seg(t, 9.6, 9.9) * (1 - seg(t, 11, 11.4)));
+    const ax = lerp(-1.5, -0.36, walk), bx = lerp(1.5, 0.36, walk), rx = lerp(bx, 0.3, c);
+    const amp = 1 - seg(t, 1.1, 1.4);
+    const base = t < 1.4 ? walkPose(t * 7, amp) : IDLE;
+    const zA = -0.16, zB = 0.16;
+
+    // Human–human handshake point; the robot copies the partner's joint angles (independent retargeting)
+    const pB0 = poseHuman(HB, { ...base, x: bx, z: zB, facing: -1 });
+    const pA0 = poseHuman(HA, { ...base, x: ax, z: zA, facing: 1 });
+    const M0 = new V3((ax + bx) / 2, 1.08 + bob, 0);
+    // the yellow hand meets slightly behind the contact point and the blue hand slightly in front, so the blue
+    // hand reads as the one on top (the yellow body stands nearer the camera)
+    const HAND_DZ = 0.06;
+    const pB = poseHuman(HB, { ...base, x: bx, z: zB, facing: -1, ik: { target: M0.clone().setZ(M0.z - HAND_DZ), w: reach } });
+    void pA0; void pB0;
+
+    // Copy B's arm angles onto the robot by measuring the human arm in its sagittal plane
+    const shoB = wpos(HB.bones[17]);
+    const angB = armIK2((shoB.x - M0.x), shoB.y - M0.y, S_UA, S_FA);
+    const copied = { s: lerp(IDLE.sR, angB.s, reach), e: lerp(IDLE.eR, angB.e, reach) };
+
+    // Adaptive: the robot reaches a point it can actually reach; the human leans in and meets it
+    const rTmp = poseRobot(RB, { ...base, x: rx, z: zB, facing: -1, near: 'right', sR: copied.s, eR: copied.e });
+    const Mc = new V3(rx - 0.31, rTmp.sho.y - 0.1 + bob, rTmp.sho.z);
+    const r = poseRobot(RB, { ...base, x: rx, z: zB, facing: -1, near: 'right', sR: copied.s, eR: copied.e, ik: { target: Mc, w: c } });
+    const tgtA = M0.clone().lerp(r.handN, c); tgtA.z += HAND_DZ;
+    const pA = poseHuman(HA, { ...base, lean: base.lean + 9 * c, x: ax, z: zA, facing: 1, ik: { target: tgtA, w: reach } });
+
+    // Smooth handoff: the human partner fades out while the humanoid fades in, in the same place. Neither
+    // body writes depth while fading (a faint body would otherwise cut holes in the other, or hide the
+    // humanoid inside the human), and the human is drawn last so it blends over the emerging humanoid.
+    setFx(HB.mats, 'uDissolve', 0); setFx(RB.mats, 'uDissolve', 0);
+    setFx(RB.mats, 'uRimStr', 0);
+    // the human fades slowly and gently, lingering as a translucent ghost over the humanoid before it's gone
+    const ghost = 1 - seg(t, 4.0, 6.4);
+    HB.mesh.renderOrder = 2;
+    HB_DEPTH.visible = ghost < 0.999;
+    fadeBody(HB, ghost, false); fadeBody(RB, m, false);
+    show(HB, ghost > 0.002); show(RB, m > 0);
+
+    const hA = proj(pA.handN), hB = proj(m < 0.5 ? pB.handN : r.handN);
+    const mp = mid2(hA, hB);
+    return {
+        focal: mp,
+        fx: () => {
+            if (t < 4.6) {
+                // a deeper glow around the clasped hands: wide halo plus a tighter, darker core
+                const glow = seg(t, 1.9, 2.3) * (1 - m * 1.5), col = lerpCol(TEAL, RED, m);
+                bloom(mp, 60 + 8 * Math.sin(t * 6), col, 1.9 * glow);
+                bloom(mp, 32, col, 1.6 * glow);
+            }
+            if (t >= 4.4 && t < 5.3) {
+                const k = seg(t, 4.4, 5.3);
+                ctx.save();  ctx.lineCap = 'round';
+                const d = dist2(hA, hB) || 1, nx = -(hB.y - hA.y) / d, ny = (hB.x - hA.x) / d, wob = Math.sin(NOW * 40) * 6 * k;
+                for (const [w, al] of [[10, 0.12], [3.5 * (1 - k) + 1, 0.9]]) {
+                    ctx.strokeStyle = `rgba(${lerpCol(TEAL, RED, k)},${al})`; ctx.lineWidth = w;
+                    ctx.beginPath(); ctx.moveTo(hA.x, hA.y); ctx.quadraticCurveTo(mp.x + nx * wob, mp.y + ny * wob, hB.x, hB.y); ctx.stroke();
+                }
+                ctx.restore();
+            }
+            sparks(mp, t - 5.3, 34, 5);
+            if (t >= 5.9 && t < 9.0) {
+                ctx.save();
+                ctx.strokeStyle = `rgba(${RED},${(0.35 + 0.25 * Math.sin(NOW * 6)) * (1 - seg(t, 8.4, 9))})`;
+                ctx.lineWidth = 2; ctx.setLineDash([4, 7]);
+                ctx.beginPath(); ctx.moveTo(hA.x, hA.y); ctx.lineTo(hB.x, hB.y); ctx.stroke();
+                ctx.restore();
+            }
+            if (t >= 9.0) {
+                bloom(mp, 70 + 10 * Math.sin(t * 6), TEAL, 1.7 * seg(t, 9.0, 9.2));
+                bloom(mp, 40, ORANGE, 1.0 * seg(t, 9.0, 9.2));
+                burst(mp, (t - 9.0) / 1.1, TEAL, ORANGE);
+            }
+        },
+    };
+}
+
+// ------------------------------------------------------------------
+// Act II — Representation: two separate motion manifolds merge into one shared embedding space
+// ------------------------------------------------------------------
+const TAU = Math.PI * 2;
+
+// Human, before the merge: jumping jacks. Arms sweep out to overhead and the legs spread, with a hop
+// on every switch; turned towards the camera so the sideways spread reads.
+function jumpingJackPose(t) {
+    const ph = TAU * t / 0.95, c = 0.5 - 0.5 * Math.cos(ph);
+    const open = c * c * (3 - 2 * c);           // snap between the ends and pause briefly at each
+    const air = Math.abs(Math.sin(ph)), land = 1 - air;
+    const swing = Math.sin(Math.PI * open);     // 1 mid-sweep, 0 at the ends
+    // arms and legs open together into a star: arms rise diagonally up-and-out (not straight overhead)
+    // exactly as the legs spread; knees and hips give on every landing and straighten in the air
+    const arm = { s: 28 * swing, e: 12 + 14 * swing, a: 8 + 112 * open };
+    const leg = { h: 3 + 8 * land, k: -4 - 20 * land, b: 2 + 10 * open };
+    return {
+        lean: 4 * land, sR: arm.s, eR: arm.e, sL: arm.s, eL: arm.e, aR: arm.a, aL: arm.a,
+        hR: leg.h, kR: leg.k, hL: leg.h, kL: leg.k, bR: leg.b, bL: leg.b,
+        jump: 0.055 * air, turn: -0.8,
+    };
+}
+
+// Humanoid, before the merge: jump squats. Sink into a deep squat, then explode upwards with the arms
+// swinging overhead.
+function jumpSquatPose(t) {
+    const c = TAU * t / 1.3, sq = Math.pow(Math.max(0, Math.cos(c)), 0.8), air = Math.pow(Math.max(0, -Math.cos(c)), 1.5);
+    return {
+        lean: 22 * sq, sR: 25 + 65 * sq + 110 * air, eR: 20 + 20 * sq, sL: 25 + 65 * sq + 110 * air, eL: 20 + 20 * sq,
+        aR: 0, aL: 0, hR: 4 + 78 * sq, kR: -4 - 120 * sq, hL: 4 + 78 * sq, kL: -4 - 120 * sq, bR: 0, bL: 0,
+        jump: 0.2 * air, turn: 0.6,
+    };
+}
+
+// Both, once the spaces merge: jumping lunges in sync. The lead leg switches in the air on every jump.
+function jumpLungePose(t, turn) {
+    const lead = Math.cos(Math.PI * t / 0.8), d = Math.abs(lead);
+    const F = { h: 75 * d, k: -80 * d }, B = { h: -15 * d, k: -70 * d };
+    const [nearL, farL] = lead > 0 ? [F, B] : [B, F];
+    return {
+        lean: 6 * d, sR: 20 - 45 * lead, eR: 55, sL: 20 + 45 * lead, eL: 55, aR: 6, aL: 6,
+        hR: nearL.h, kR: nearL.k, hL: farL.h, kL: farL.k, bR: 0, bL: 0,
+        jump: 0.17 * Math.pow(Math.max(0, 1 - d / 0.65), 2), turn,
+    };
+}
+
+// 3D motion manifolds: a smooth polar-grid sheet whose rim wobbles (harmonics) and whose surface has hills
+// and saddles that fade towards the rim. Rebuilt every frame so two sheets can slide together and morph into one.
+const MANI_R = 28, MANI_S = 112;
+const MANI = {
+    // harm: rim wobble; bumps: [u, v, width, height] gaussians (negative height = valley, unit-disc coords);
+    // ph: ripple phases. Each agent has its own clearly different landscape; the shared one combines them.
+    // human: smooth, round sheet with one tall, sharp mountain and a small valley
+    human: { harm: [[2, 0.04, 0.4], [3, 0.03, 1.9], [4, 0.0, 0.7]], ph: [0.3, 1.7],
+             bumps: [[0.22, -0.2, 0.035, 1.25], [-0.45, 0.25, 0.05, -0.45], [0.0, 0.0, 0.05, 0.0]] },
+    // humanoid: lobed, four-cornered sheet with twin rounded peaks and a long valley between them
+    robot: { harm: [[2, 0.08, 2.3], [3, 0.03, 0.3], [4, 0.14, 0.4]], ph: [2.1, 0.4],
+             bumps: [[-0.7, 0.05, 0.05, 0.75], [0.35, -0.35, 0.05, 0.7], [-0.15, 0.3, 0.12, -0.6]] },
+    // shared: one main peak, a smaller shoulder peak and a valley
+    shared: { harm: [[2, 0.06, 1.1], [3, 0.05, 2.6], [4, 0.04, 0.2]], ph: [1.2, 2.8],
+              bumps: [[-0.1, -0.3, 0.045, 1.05], [0.45, 0.1, 0.05, 0.45], [0.35, 0.3, 0.06, -0.55]] },
+};
+const lerpH = (A, B, f) => A.map((a, i) => [a[0], lerp(a[1], B[i][1], f), lerp(a[2], B[i][2], f)]);
+const lerp2 = (a, b, f) => a.map((v, i) => lerp(v, b[i], f));
+const mixShape = (A, B, f) => ({ harm: lerpH(A.harm, B.harm, f), bumps: A.bumps.map((b, i) => lerp2(b, B.bumps[i], f)), ph: lerp2(A.ph, B.ph, f) });
+
+function makeManifold(color) {
+    const n = (MANI_R + 1) * MANI_S;
+    const pos = new THREE.BufferAttribute(new Float32Array(n * 3), 3);
+    const shade = new THREE.BufferAttribute(new Float32Array(n * 3), 3);   // per-vertex hillshade
+    const id = (j, i) => j * MANI_S + (i % MANI_S), tri = [];
+    for (let j = 0; j < MANI_R; j++) for (let i = 0; i < MANI_S; i++)
+        tri.push(id(j, i), id(j + 1, i), id(j + 1, i + 1), id(j, i), id(j + 1, i + 1), id(j, i + 1));
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', pos); geo.setAttribute('color', shade); geo.setIndex(tri);
+    // unlit: all shading comes from the per-vertex hillshade computed in updateManifold
+    const mat = new THREE.MeshBasicMaterial({ color, vertexColors: true, transparent: true, opacity: 0.88, side: THREE.DoubleSide, depthWrite: false });
+    const group = new THREE.Group();
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.renderOrder = 1;
+    group.add(mesh);
+    group.visible = false;
+    scene.add(group);
+    return { group, pos, shade, geo, mat };
+}
+
+// point on a manifold from polar coords (rho in [0, 1], theta)
+// Terrain height in units of hgt: the shape's mountains and valleys (bumps) with faint
+// ripples, flattening to 0 at the rim. Defined on (u, v) so it stays smooth through the centre.
+function terrain(sh, t, rho, th) {
+    const u = rho * Math.cos(th), v = rho * Math.sin(th);
+    const g = ([cu, cv], w) => Math.exp(-((u - cu) ** 2 + (v - cv) ** 2) / w);
+    const drift = 0.05 * Math.sin(0.7 * t);   // the landscape breathes slightly
+    let h = 0.07 * Math.sin(3 * u + 0.5 * t + sh.ph[0]) * Math.cos(3 * v + sh.ph[1]);
+    for (const [bu, bv, w, a] of sh.bumps) h += a * g([bu + drift, bv], w);
+    return h * (1 - rho ** 4);
+}
+
+function maniPoint(c, rx, rz, hgt, sh, t, rho, th, out = new V3()) {
+    let r = 1;
+    for (const [k, a, p] of sh.harm) r += a * Math.sin(k * th + p + t * 0.6);
+    const y = hgt * terrain(sh, t, rho, th);
+    const dz = rz * rho * r * Math.sin(th);
+    // never let it dip below the floor, which would hide that part of the sheet
+    return out.set(c.x + rx * rho * r * Math.cos(th), Math.max(0.015, c.y + y - 0.2 * Math.min(dz, 0)), c.z + dz);
+}
+
+const LIGHT = new V3(-0.55, 0.75, 0.4).normalize();
+function updateManifold(M, c, rx, rz, hgt, sh, t) {
+    const a = M.pos.array, v = new V3(), hs = new Float32Array((MANI_R + 1) * MANI_S);
+    for (let j = 0; j <= MANI_R; j++) for (let i = 0; i < MANI_S; i++) {
+        const rho = j / MANI_R, th = (i / MANI_S) * TAU, idx = j * MANI_S + i;
+        maniPoint(c, rx, rz, hgt, sh, t, rho, th, v);
+        a[idx * 3] = v.x; a[idx * 3 + 1] = v.y; a[idx * 3 + 2] = v.z;
+        hs[idx] = terrain(sh, t, rho, th);
+    }
+    M.pos.needsUpdate = true;
+    M.geo.computeVertexNormals(); M.geo.computeBoundingSphere();
+    // hillshade: slopes facing the light are bright, slopes facing away fall into shadow; peaks are
+    // tinted darker and valleys lighter, and soft elevation bands make the height changes readable
+    const nrm = M.geo.attributes.normal.array, col = M.shade.array, n = new V3();
+    for (let idx = 0; idx < hs.length; idx++) {
+        n.set(nrm[idx * 3], nrm[idx * 3 + 1], nrm[idx * 3 + 2]);
+        if (n.y < 0) n.negate();
+        const lit = 0.18 + 1.05 * Math.max(0, n.dot(LIGHT));
+        const h = hs[idx];
+        const tint = 1 - 0.38 * Math.max(0, h) + 0.12 * Math.max(0, -h);
+        const band = 1 - 0.09 * (0.5 + 0.5 * Math.cos(TAU * h * 4));
+        col[idx * 3] = col[idx * 3 + 1] = col[idx * 3 + 2] = clamp(lit * tint * band, 0.22, 1.2);
+    }
+    M.shade.needsUpdate = true;
+}
+
+const MH = makeManifold(0x3b5bdb), MR = makeManifold(0xea580c);
+const hideManifolds = () => { MH.group.visible = false; MR.group.visible = false; };
+// colour of the shared space, rgb(242, 140, 40)
+const GOLD = '242,140,40';
+const C_BLUE = new THREE.Color(0x3b5bdb), C_ORANGE = new THREE.Color(0xea580c), C_SHARED = new THREE.Color(0xf28c28), C_MIST = new THREE.Color(0xc7cbe0);
+// blend into the shared colour through a pale mist, so blue -> gold doesn't pass through a muddy green
+const maniColor = (from, f) => new THREE.Color().lerpColors(from, C_SHARED, f).lerp(C_MIST, 0.55 * Math.sin(Math.PI * f));
+
+function actRepresentation(t) {
+    fadeBody(HB, 1); fadeBody(RB, 1);
+    show(HA, true); show(HB, false); show(HG, false); show(RB, true); show(HW, false); GHOSTS.forEach(g => show(g, false));
+    setFx(HA.mats, 'uDissolve', 0); setFx(HA.mats, 'uNoise', 0); setFx(RB.mats, 'uDissolve', 0); setFx(RB.mats, 'uRimStr', 0);
+    const m = seg(t, 5.2, 6.8), sync = seg(t, 6.8, 7.6);
+    const XH = -0.44, XR = 0.7;   // human sits a little inwards so its jumping jacks stay inside the card
+    // different motions first, then both jump and lunge in sync
+    poseHuman(HA, { ...lerpPose(jumpingJackPose(t), jumpLungePose(t, -0.45), sync), x: XH, z: 0, facing: 1, near: 'right' });
+    poseRobot(RB, { ...lerpPose(jumpSquatPose(t), jumpLungePose(t, 0.45), sync), x: XR, z: 0, facing: -1, near: 'left' });
+
+    // One manifold in front of each body, sliding together and morphing into one larger shared space
+    // In front of the agents (the camera sees the floor out to ~1.8 m), so on screen the sheets sit below
+    // their feet instead of covering their legs; sized to stay inside the card at this depth
+    const Z = 1.32, Y = 0.1, XM = 0.5;
+    const cH = new V3(lerp(-XM, 0, m), Y, Z), cR = new V3(lerp(XM, 0, m), Y, Z);
+    const rx = lerp(0.3, 0.72, m), rz = lerp(0.32, 0.4, m), hgt = lerp(0.26, 0.28, m);
+    const shH = mixShape(MANI.human, MANI.shared, m), shR = mixShape(MANI.robot, MANI.shared, m);
+    updateManifold(MH, cH, rx, rz, hgt, shH, t);
+    updateManifold(MR, cR, rx, rz, hgt, shR, t);
+    const fadeR = 1 - seg(m, 0.8, 1);   // once they coincide, a single sheet remains
+    MH.group.visible = true; MR.group.visible = fadeR > 0.01;
+    MH.mat.color.copy(maniColor(C_BLUE, m));
+    MR.mat.color.copy(maniColor(C_ORANGE, m));
+    MR.mat.opacity = 0.88 * fadeR;
+
+    // Each body's current motion is a point travelling over its manifold; after the merge both bodies
+    // trace the same path over the shared space
+    // once both motions share the space, their trails and symbols turn black
+    const SHARED_INK = '17,17,17';
+    const colH = lerpCol(BLUE, SHARED_INK, sync), colR = lerpCol(ORANGE, SHARED_INK, sync);
+    const humanUV = s => [0.55 * Math.sin(2.4 * s), 0.45 * Math.sin(4.8 * s + 0.6)];
+    const robotUV = s => [0.5 * Math.cos(3.6 * s + 0.4), 0.5 * Math.sin(1.8 * s)];
+    const onSheet = (c, sh, [u, v]) => {
+        const p = maniPoint(c, rx, rz, hgt, sh, t, Math.min(0.95, Math.hypot(u, v)), Math.atan2(v, u));
+        p.y += 0.025;
+        return proj(p);
+    };
+    const dotH = s => onSheet(cH, shH, humanUV(s));
+    const dotR = s => {
+        const a = robotUV(s), b = humanUV(s);
+        return onSheet(cR, shR, [lerp(a[0], b[0], sync), lerp(a[1], b[1], sync)]);
+    };
+    const tetherH = proj(new V3(XH, 0.08, 0)), tetherR = proj(new V3(XR, 0.08, 0));
+    const centre = proj(new V3(0, Y + 0.08, Z));
+
+    return {
+        focal: { x: W / 2, y: H * 0.45 },
+        fx: () => {
+            ctx.save();
+            if (m > 0.7) bloom(centre, 260, GOLD, 0.35 * seg(m, 0.7, 1) * (1 - seg(t, 7.2, 8.4) * 0.6));
+            for (const [dot, tether, col, square] of [[dotR, tetherR, colR, true], [dotH, tetherH, colH, false]]) {
+                const p = dot(t);
+                // faint link from the body down to where its motion currently sits in the space
+                ctx.strokeStyle = `rgba(${col},0.35)`; ctx.lineWidth = 1.2; ctx.setLineDash([3, 6]);
+                ctx.beginPath(); ctx.moveTo(tether.x, tether.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+                ctx.setLineDash([]);
+                // trail of the last ~0.8 s of motion
+                ctx.lineCap = 'round';
+                for (let i = 1; i <= 16; i++) {
+                    const a = dot(t - (i - 1) * 0.05), b = dot(t - i * 0.05);
+                    ctx.strokeStyle = `rgba(${col},${0.8 * (1 - i / 16)})`; ctx.lineWidth = 3.2 * (1 - i / 16) + 0.6;
+                    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+                }
+                bloom(p, 26, col, 0.7 * (1 - sync));   // a black glow would just be a grey smudge
+                // larger marker with a white rim so it stands out against the grid lines
+                ctx.fillStyle = `rgba(${col},1)`; ctx.strokeStyle = 'rgba(255,255,255,0.95)'; ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                if (square) { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(Math.PI / 4); ctx.rect(-8, -8, 16, 16); ctx.restore(); }
+                else ctx.arc(p.x, p.y, 9, 0, 7);
+                ctx.fill(); ctx.stroke();
+            }
+            ctx.restore();
+        },
+    };
+}
+
+// ------------------------------------------------------------------
+// Act III — Generation: human model + optimization retargeting is brittle to noisy partners;
+// a feed-forward model generates humanoid motion directly
+// ------------------------------------------------------------------
+const PASS = 5.75;
+function actGeneration(t) {
+    hideManifolds(); fadeBody(HB, 1); fadeBody(RB, 1);
+    const naive = t < PASS, u = naive ? t : t - PASS;
+    show(HA, true); show(HB, false); show(HG, naive); show(RB, true);
+    setFx(RB.mats, 'uDissolve', 0); setFx(RB.mats, 'uRimStr', 0);
+    const hw = x => seg(x, 1.2, 2.0) * (1 - seg(x, 3.3, 4.1));
+    const quality = x => (x < 0.8 ? 'clean' : x < 1.7 ? 'noisy' : x < 2.6 ? 'missing' : x < 3.5 ? 'noisy' : 'clean');
+    const HXp = { x: -0.36, z: -0.16, facing: 1, near: 'right' }, RXp = { x: 0.32, z: -0.125, facing: -1, near: 'left' };
+    const M = new V3(-0.02, 1.32, 0.0);
+    const q = quality(u), seed = Math.floor(u * 10);
+
+    const humanHand = x => poseHuman(HA, { ...IDLE, ...HXp, ik: { target: M, w: hw(x) } }).handN.clone();
+    // Conventional pipeline, stage 1: a human motion model generates a *human* response
+    // from the partner observation; it holds the last frame while the partner is occluded
+    // and jumps when they reappear.
+    const genHuman = x => {
+        let ul = x - 0.3;
+        if (quality(Math.max(ul, 0)) === 'missing') ul = 1.7;
+        const noisy = quality(Math.max(ul, 0)) === 'noisy', fs = Math.floor(x * 10);
+        const obs = humanHand(Math.max(ul, 0));
+        if (noisy) obs.add(new V3(hash(fs * 3) * 0.08, hash(fs * 5) * 0.08, 0));
+        return { pose: { ...IDLE, x: RXp.x, z: RXp.z, facing: -1, near: 'left', ik: { target: obs, w: hw(ul) } }, noisy };
+    };
+    // Stage 2: optimization-based retargeting chases that human response onto the robot;
+    // it lags, and diverges at every discontinuity in its input.
+    const spike = [[1.1, 10], [2.9, 32]].reduce((a, [tb, k]) => a + (u > tb ? k * Math.exp(-(u - tb) * 5) : 0), 0);
+    let target, w, jitter = 0, gen = null;
+    if (naive) {
+        const lagged = genHuman(u - 0.45);
+        target = poseHuman(HG, lagged.pose).handN.clone();
+        w = hw(u - 0.75);
+        jitter = (lagged.noisy ? 6 : 0) + spike;
+        gen = genHuman(u);
+    } else { target = M; w = hw(u + 0.08); }
+    const jit = {};
+    if (jitter) ['sR', 'eR', 'sL', 'eL', 'lean'].forEach((k, i) => (jit[k] = (IDLE[k] || 0) + hash(seed * 17 + i * 3.1) * jitter));
+    const pR = poseRobot(RB, { ...IDLE, ...jit, ...RXp, ik: { target, w } });
+    if (naive) {
+        poseHuman(HG, gen.pose);
+        setFx(HG.mats, 'uNoise', gen.noisy ? 0.035 : 0);
+    }
+    const failing = naive && spike > 6;
+
+    const ghostOn = !naive;
+    GHOSTS.forEach((g, i) => {
+        show(g, ghostOn);
+        if (!ghostOn) return;
+        const h = 0.3 * (i + 1);
+        poseRobot(g, { ...IDLE, ...RXp, ik: { target: M, w: hw(u + h) } });
+        setFx(g.mats, 'uNoise', h * 0.09);
+        // future frames only show where they differ from now, so the robot itself stays readable
+        const change = clamp(Math.abs(hw(u + h) - hw(u)) * 3, 0, 1);
+        g.mats.forEach(mm => (mm.opacity = (0.2 - h * 0.11) * change * seg(u, 0, 0.5)));
+    });
+
+    const pH = poseHuman(HA, { ...IDLE, ...HXp, ik: { target: M, w: hw(u) } });
+    setFx(HA.mats, 'uNoise', q === 'noisy' ? 0.05 : 0);
+    setFx(HA.mats, 'uDissolve', q === 'missing' ? 0.88 : 0);
+    setFx(HA.mats, 'uEdge', 0x3b7ea1);
+    const est = !naive && q !== 'clean';
+    show(HW, est);
+    if (est) poseHuman(HW, { ...IDLE, ...HXp, ik: { target: M, w: hw(u) } });
+    setFx(RB.mats, 'uRim', failing ? 0xef4444 : 0xfb923c);
+    setFx(RB.mats, 'uRimStr', failing ? 1.6 : !naive && hw(u) > 0.9 ? 1.4 : 0);
+
+    const hH = proj(pH.handN), hR = proj(pR.handN), d = dist2(hH, hR), Mp = proj(M);
+    return {
+        focal: Mp,
+        fx: () => {
+            if (naive) {
+                // optimizer spinning on every frame
+                const c = proj(new V3(RXp.x + 0.28, 1.62, RXp.z));
+                ctx.save();
+                for (let i = 0; i < 10; i++) {
+                    const a = (i / 10) * Math.PI * 2, lead = ((NOW * 8 - i) % 10 + 10) % 10;
+                    ctx.fillStyle = `rgba(${failing ? RED : INK},${0.15 + 0.7 * Math.max(0, 1 - lead / 6)})`;
+                    ctx.beginPath(); ctx.arc(c.x + Math.cos(a) * 13, c.y + Math.sin(a) * 13, 2.6, 0, 7); ctx.fill();
+                }
+                ctx.restore();
+                const dt = u - 2.0;
+                if (dt >= 0 && dt <= 1 && d > 14) {
+                    ctx.save(); ctx.strokeStyle = `rgba(${RED},${1 - dt})`; ctx.lineWidth = 2.5;
+                    ctx.beginPath(); ctx.arc(hH.x, hH.y, 14 + dt * 70, 0, 7); ctx.stroke(); ctx.restore();
+                }
+            } else {
+                if (hw(u) > 0.9 && d < 22) {
+                    const mp = mid2(hH, hR);
+                    bloom(mp, 70 + 8 * Math.sin(NOW * 7), TEAL, 0.75);
+                    bloom(mp, 40, ORANGE, 0.5);
+                }
+                burst(Mp, (u - 1.95) / 1.1, TEAL, ORANGE);
+                horizon(u);
+            }
+        },
+    };
+}
+
+// Diffusion-forcing horizon: past frames clean, future frames progressively noisier
+function horizon(u) {
+    const a = seg(u, 0.1, 0.7);
+    if (a <= 0.01) return;
+    const n = 15, cw = 24, gap = 6, x0 = W / 2 - (n * cw + (n - 1) * gap) / 2, y = proj(new V3(0, 0, 0)).y + 34;
+    const fr = Math.floor(NOW * 10);
+    ctx.save(); ctx.globalAlpha = a;
+    for (let i = 0; i < n; i++) {
+        const j = i - 7, x = x0 + i * (cw + gap);
+        if (j <= 0) {
+            ctx.fillStyle = `rgba(${TEAL},${0.25 + 0.4 * (1 + j / 7)})`; ctx.fillRect(x, y, cw, cw);
+        } else {
+            const lvl = j / 7;
+            ctx.fillStyle = `rgba(${ORANGE},${0.6 * (1 - lvl)})`; ctx.fillRect(x, y, cw, cw);
+            ctx.fillStyle = 'rgba(31,41,55,0.45)';
+            for (let dd = 0; dd < Math.round(lvl * 22); dd++) {
+                ctx.fillRect(x + Math.abs(hash(i * 31 + dd * 7 + fr)) * (cw - 2), y + Math.abs(hash(i * 17 + dd * 13 + fr)) * (cw - 2), 2, 2);
+            }
+        }
+        ctx.strokeStyle = 'rgba(31,41,55,0.15)'; ctx.strokeRect(x + 0.5, y + 0.5, cw - 1, cw - 1);
+    }
+    const nx = x0 + 7 * (cw + gap) + cw / 2;
+    ctx.fillStyle = '#1f2937';
+    ctx.beginPath(); ctx.moveTo(nx - 5, y - 10); ctx.lineTo(nx + 5, y - 10); ctx.lineTo(nx, y - 4); ctx.fill();
+    ctx.restore();
+}
+
+// ------------------------------------------------------------------
+// Story: three panels, each looping its own act
+// ------------------------------------------------------------------
+const ACTS = [
+    {
+        num: '1', name: 'Data gap', scene: actData, anim: 12, dur: 18.5,
+        claim: 'There is a lot of human–human interaction data, but no human–humanoid interaction data.',
+        cam: { pos: [0.25, 1.0, 5.0], look: [0, 0.86, 0] },
+        beats: [
+            [0.4, 'Human–Human Interaction', '', 'There is ample human–human data, but no dataset captures natural human–humanoid interaction'],
+            [4.7, 'Independently retargeting the human breaks the interaction', 'r', ''],
+            [8.3, 'We introduce adaptive retargeting, which preserves the interaction', 't', 'It co-morphs the human partner toward the retargeted humanoid'],
+            [12.4, 'From this we created HHI, a 260-hour human–humanoid interaction benchmark', 'v', ''],
+        ],
+        video: { src: 'assets/retargeting_results/Chi3d_Handshake_1_1.mov', len: 4.86, rate: 1, fit: 'cover', zoom: 0.88, origin: [0.5, 0.5], bg: '#ffffff' },
+    },
+    {
+        num: '2', name: 'Representation gap', scene: actRepresentation, anim: 12, dur: 25.5,
+        claim: 'Humans and humanoids have different morphologies and need different representations for the same motion.',
+        cam: { pos: [0, 1.1, 5.8], look: [0, 1.05, 0] },
+        beats: [
+            [0.4, 'Human motion and humanoid motion', '', ''],
+            [5.4, 'We introduce a shared-codebook VQ-VAE', 't', 'It creates a shared latent space for human and humanoid motion'],
+            [12.4, 'This helps downstream human–humanoid interaction modeling', 'v', 'It also enables cross-embodiment translation'],
+            [18.7, 'Shadow teleoperation', 'v', ''],
+        ],
+        video: { src: '/assets/videos/embody3d_CHARADES__charades__c--20250128--1000--PZA883--CKG723--EGJ844--UBT089--pilot--MotionPrior--CHARADES_Squat--048500-048951_1.mp4', len: 10.63, rate: 1, fit: 'width', zoom: 1, origin: [0.52, 0.55], bg: '#ffffff' },
+        // second clip, cross-faded in over the first at `at` seconds
+        next: { at: 18.5, src: 'assets/shadow_teleops_web/random_hand_moves.mp4', len: 20.9, rate: 1, fit: 'cover', zoom: 1.3, origin: [0.45, 0.55], bg: '#ffffff' },
+    },
+    {
+        num: '3', name: 'Generation gap', scene: actGeneration, anim: 11.5, dur: 18,
+        claim: 'A socially responsive humanoid must react to noisy, discontinuous partner observations in real time.',
+        cam: { pos: [-0.25, 1.0, 5.0], look: [0, 0.88, 0] },
+        beats: [
+            [0.4, 'A natural approach: generate the humanoid’s response with a human motion model, then retarget it by optimization', '', ''],
+            [2.3, 'This increases latency, and the optimization may add error and motion drift', 'r', ''],
+            [5.9, 'We introduce the Social Humanoid high-level policy', 't', 'It generates humanoid motion directly and naturally handles noisy or occluded partners'],
+            [11.9, 'It runs in real time, with a low-level whole-body controller executing the generated motion on a Unitree G1', 'v', ''],
+        ],
+        video: { src: 'assets/demos/high_five_LW_short.mp4', len: 3.67, rate: 0.85, fit: 'cover', zoom: 1.0, origin: [0.46, 0.5], bg: '#f3f5f8' },
+    },
+];
+
+const panelGrid = document.getElementById('gap-grid');
+const replay = el => { el.classList.remove('in'); void el.offsetWidth; el.classList.add('in'); };
+
+const PLAY = '<svg viewBox="0 0 12 12" fill="currentColor"><path d="M3 1.5v9l7.5-4.5z"/></svg>';
+const PAUSE = '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="3" height="9" rx="0.6"/><rect x="7" y="1.5" width="3" height="9" rx="0.6"/></svg>';
+const PREV = '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="1.5" y="1.5" width="1.6" height="9" rx="0.5"/><path d="M10.5 1.5v9L4 6z"/></svg>';
+const NEXT = '<svg viewBox="0 0 12 12" fill="currentColor"><rect x="8.9" y="1.5" width="1.6" height="9" rx="0.5"/><path d="M1.5 1.5v9L8 6z"/></svg>';
+
+// Each panel keeps its own clock (t) and play state, so panels can be scrubbed and stepped independently
+for (const a of ACTS) {
+    const card = document.createElement('article');
+    card.className = 'gap-card';
+    const ticks = a.beats.map(b => `<span class="gc-tick" style="left: calc(7px + (100% - 14px) * ${b[0] / a.dur})"></span>`).join('');
+    card.innerHTML = `
+        <header><span class="num">${a.num}</span><h4>${a.name}</h4></header>
+        <p class="claim">${a.claim}</p>
+        <div class="stage" role="img" aria-label="${a.name}: animation"><canvas></canvas><div class="loading">Loading…</div></div>
+        <div class="beat"><b></b><span class="sub"></span></div>
+        <div class="gap-controls">
+            <button type="button" class="gc-btn gc-play"></button>
+            <button type="button" class="gc-btn gc-prev" aria-label="Previous step">${PREV}</button>
+            <div class="gc-scrub">${ticks}<input type="range" min="0" max="${a.dur}" step="0.01" value="0" aria-label="${a.name} timeline"></div>
+            <button type="button" class="gc-btn gc-next" aria-label="Next step">${NEXT}</button>
+            <span class="gc-count" aria-live="polite"></span>
+        </div>`;
+    panelGrid.appendChild(card);
+    Object.assign(a, {
+        card, stage: card.querySelector('.stage'), canvas: card.querySelector('canvas'),
+        beatEl: card.querySelector('.beat'), scrub: card.querySelector('.gc-scrub input'),
+        playEl: card.querySelector('.gc-play'), countEl: card.querySelector('.gc-count'),
+        visible: true, beatKey: '', t: 0, playing: true, scrubbing: false,
+    });
+    a.ctx = a.canvas.getContext('2d');
+    const makeClip = () => {
+        const v = document.createElement('video');
+        Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'none' });
+        for (const ev of ['loadeddata', 'seeked']) v.addEventListener(ev, () => { if (!a.playing) renderPanel(a); });
+        return v;
+    };
+    a.el = makeClip();
+    if (a.next) a.nextEl = makeClip();
+    a.stage.addEventListener('click', () => setPlaying(a, !a.playing));
+    a.playEl.addEventListener('click', () => setPlaying(a, !a.playing));
+    a.card.querySelector('.gc-prev').addEventListener('click', () => stepBeat(a, -1));
+    a.card.querySelector('.gc-next').addEventListener('click', () => stepBeat(a, 1));
+    // Dragging the timeline seeks this panel; playback resumes from the new spot if it was playing
+    a.scrub.addEventListener('pointerdown', () => { a.scrubbing = true; });
+    for (const ev of ['pointerup', 'pointercancel', 'change']) a.scrub.addEventListener(ev, () => { a.scrubbing = false; });
+    a.scrub.addEventListener('input', () => { a.t = Number(a.scrub.value); renderPanel(a); });
+    new IntersectionObserver(es => es.forEach(e => {
+        a.visible = e.isIntersecting;
+        if (!a.visible) { a.el.pause(); a.nextEl?.pause(); }
+    })).observe(card);
+}
+
+// Keep a clip in step with the panel clock between its start and end times
+function syncClip(a, v, cfg, start, end, tau) {
+    if (tau > start - 3 && !v.getAttribute('src')) { v.src = cfg.src; v.preload = 'auto'; }
+    if (tau < start || tau >= end || !a.visible) { if (!v.paused) v.pause(); return; }
+    v.playbackRate = cfg.rate;
+    if (a.playing && v.paused) v.play().catch(() => {});
+    if (!a.playing && !v.paused) v.pause();
+    const want = ((tau - start) * cfg.rate) % cfg.len;
+    if (v.readyState >= 1 && Math.abs(v.currentTime - want) > 0.4) v.currentTime = want;
+}
+
+function syncVideo(a, tau) {
+    // the first clip keeps playing through the cross-fade into the next one
+    syncClip(a, a.el, a.video, a.anim, a.next ? a.next.at + 0.6 : Infinity, tau);
+    if (a.next) syncClip(a, a.nextEl, a.next, a.next.at, Infinity, tau);
+}
+
+function drawClip(v, cfg) {
+    if (v.readyState < 2 || !v.videoWidth) return;
+    // 'cover' fills the portrait panel; 'width' keeps the whole width for wide clips
+    const base = cfg.fit === 'cover' ? Math.max(W / v.videoWidth, H / v.videoHeight) : W / v.videoWidth;
+    const sc = base * cfg.zoom, dw = v.videoWidth * sc, dh = v.videoHeight * sc;
+    ctx.drawImage(v, W / 2 - dw * cfg.origin[0], H / 2 - dh * cfg.origin[1], dw, dh);
+}
+
+// The real clip opens like an iris from the moment of contact
+function drawVideo(a, tau, focal) {
+    const v = a.el, cfg = a.video, open = seg(tau, a.anim, a.anim + 1.3);
+    if (open <= 0) return;
+    const r = 10 + Math.pow(open, 1.6) * Math.hypot(W, H);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(focal.x, focal.y, r, 0, 7); ctx.clip();
+    ctx.fillStyle = cfg.bg; ctx.fillRect(0, 0, W, H);
+    drawClip(v, cfg);
+    ctx.restore();
+    if (open < 1) {
+        ctx.save();
+        ctx.strokeStyle = `rgba(${INK},${0.8 * (1 - open)})`; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(focal.x, focal.y, r, 0, 7); ctx.stroke(); ctx.restore();
+    }
+    const mix = a.next ? seg(tau, a.next.at, a.next.at + 0.5) : 0;
+    if (mix > 0) {
+        ctx.save();
+        ctx.globalAlpha = mix;
+        ctx.fillStyle = a.next.bg; ctx.fillRect(0, 0, W, H);
+        drawClip(a.nextEl, a.next);
+        ctx.restore();
+    }
+}
+
+function renderPanel(a) {
+    NOW = a.t;
+    for (const m of FX_MATS) m.userData.u.uTime.value = a.t;
+    const tau = a.t % a.dur;
+    const drift = Math.sin(a.t * 0.25) * 0.1, push = seg(tau, 0, a.anim) * 0.25;
+    camera.position.set(a.cam.pos[0] + drift, a.cam.pos[1], a.cam.pos[2] - push);
+    camera.lookAt(...a.cam.look);
+    camera.updateMatrixWorld();
+
+    const sc = a.scene(Math.min(tau, a.anim + 1.4));
+    renderer.render(scene, camera);
+
+    const c = a.canvas;
+    ctx = a.ctx;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.drawImage(glCanvas, 0, 0, c.width, c.height);
+    ctx.setTransform(c.width / W, 0, 0, c.height / H, 0, 0);
+    if (tau < a.anim + 1.4) sc.fx();
+    if (tau < a.anim) a.focal = sc.focal;
+    drawVideo(a, tau, a.focal || sc.focal);
+    const fade = Math.max(1 - clamp(tau / 0.6, 0, 1), seg(tau, a.dur - 0.6, a.dur));
+    if (fade > 0) { ctx.fillStyle = `rgba(255,255,255,${fade})`; ctx.fillRect(0, 0, W, H); }
+
+    syncVideo(a, tau);
+
+    const beat = [...a.beats].reverse().find(b => tau >= b[0]);
+    const key = beat ? beat[1] : '';
+    if (key !== a.beatKey) {
+        a.beatKey = key;
+        a.beatEl.className = 'beat ' + (beat ? beat[2] : '');
+        a.beatEl.querySelector('b').textContent = beat ? beat[1] : '';
+        a.beatEl.querySelector('.sub').textContent = beat && beat[3] ? beat[3] : '';
+        if (beat) replay(a.beatEl);
+    }
+    a.beatEl.style.opacity = 1 - seg(tau, a.dur - 0.7, a.dur - 0.2);
+    if (!a.scrubbing) a.scrub.value = tau;
+    a.scrub.style.setProperty('--p', (tau / a.dur) * 100 + '%');
+    a.countEl.textContent = `${Math.max(0, beatIndex(a, tau)) + 1} / ${a.beats.length}`;
+}
+
+function render() {
+    for (const a of ACTS) if (a.visible) renderPanel(a);
+}
+
+// ------------------------------------------------------------------
+// Controls + loop
+// ------------------------------------------------------------------
+// Index of the beat showing at tau (-1 before the first beat appears)
+const beatIndex = (a, tau) => a.beats.reduce((idx, b, i) => (tau >= b[0] ? i : idx), -1);
+
+// Jump to the start of the previous/next beat (wrapping around) and pause there so it can be read
+function stepBeat(a, dir) {
+    const n = a.beats.length, cur = Math.max(0, beatIndex(a, a.t % a.dur));
+    const next = (cur + dir + n) % n;
+    a.t = a.beats[next][0] + 0.001;
+    setPlaying(a, false);
+}
+
+const playBtn = document.getElementById('gaps-play');
+const anyPlaying = () => ACTS.some(a => a.playing);
+const syncPlay = () => {
+    playBtn.innerHTML = anyPlaying() ? PAUSE : PLAY;
+    playBtn.setAttribute('aria-label', anyPlaying() ? 'Pause all' : 'Play all');
+    for (const a of ACTS) {
+        a.playEl.innerHTML = a.playing ? PAUSE : PLAY;
+        a.playEl.setAttribute('aria-label', a.playing ? 'Pause' : 'Play');
+    }
+};
+function setPlaying(a, on) { a.playing = on; syncPlay(); renderPanel(a); }
+// The header button plays or pauses every panel together
+playBtn.addEventListener('click', () => {
+    const on = !anyPlaying();
+    for (const a of ACTS) a.playing = on;
+    syncPlay(); render();
+});
+
+function fit() {
+    const r = ACTS[0].stage.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(r.width, r.height, false);
+    camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+    for (const a of ACTS) {
+        a.canvas.width = Math.max(1, Math.round(r.width * dpr));
+        a.canvas.height = Math.max(1, Math.round(r.height * dpr));
+    }
+}
+new ResizeObserver(() => { fit(); render(); }).observe(ACTS[0].stage);
+
+const startPaused = t => ACTS.forEach(a => Object.assign(a, { playing: false, t }));
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) startPaused(10);
+// ?t=SECONDS opens the panels paused at that moment (handy for stills and deep links)
+const qt = parseFloat(new URLSearchParams(location.search).get('t'));
+if (Number.isFinite(qt)) startPaused(Math.max(0, qt));
+syncPlay();
+fit();
+render();
+ACTS.forEach(a => (a.stage.querySelector('.loading').style.opacity = 0));
+
+let last = performance.now();
+function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    for (const a of ACTS) {
+        if (!a.playing || a.scrubbing) continue;
+        a.t += dt;
+        if (a.visible) renderPanel(a);
+    }
+    requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
 </body>
 </html>
